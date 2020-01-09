@@ -286,3 +286,20 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# Created by https://www.gitignore.io/api/fsharp
+# Edit at https://www.gitignore.io/?templates=fsharp
+
+### fsharp ###
+lib/debug
+lib/release
+Debug
+*.suo
+*.user
+obj
+bin
+/build/
+*.exe
+!.paket/paket.bootstrapper.exe
+
+# End of https://www.gitignore.io/api/fsharp
