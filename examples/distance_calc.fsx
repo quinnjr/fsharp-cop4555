@@ -1,7 +1,3 @@
-//
-//
-//
-
 // Note: Powers in F# on floats use the pown function.
 // - ** is for floating point values, not integers.
 // - ^ is not usable.
@@ -21,8 +17,8 @@ let main () =
 
   printfn "Finding the distance between Point (%f, %f) and Point (%f, %f)" x1 y1 x2 y2
 
-  // let result = distance x1 y1 x2 y2
+  let result = distance x1 y1 x2 y2
 
-  // printfn "The distance between Point (%f, %f) and Point (%f, %f) is %f" x1 y1 x2 y2 result
+  printfn "The distance between Point (%f, %f) and Point (%f, %f) is %f" x1 y1 x2 y2 result
 
 main()
