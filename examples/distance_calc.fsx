@@ -4,17 +4,25 @@
 
 open System
 
-// Note: Powers in F# are denoted by the `**` operator.
-// Strange...
-let distance (x1: int, y1: int) (x2: int, y2: int) : int =
-  sqrt (pown((x2 - x1) 2) + pown((y2 - y1) 2))
+// Note: Powers in F# on floats use the pown function.
+// - ** is for floating point values, not integers.
+// - ^ is not usable.
+let distance (x1: float) (y1: float) (x2: float) (y2: float) : float =
+  let x_f = (x2 - x1)**2
+  let y_f = (y2 - y1)**2
+
+  sqrt (x_f + y_f)
 
 [<EntryPoint>]
 let main args =
-  let x1, y1, x2, y2 = ((args.[1] |> int), (args.[2] |> int),
-  (args.[3] |> int), (args.[4] |> int))
+  // TODO: Single `let` statement
+  let x1 = (args.[1] |> float)
+  let y1 = (args.[2] |> float)
+  let x2 = (args.[3] |> float)
+  let y2 = (args.[4] |> float)
 
-  let result = distance x1 y1 x2 y2
+  printfn "Finding the distance between Point (%f, %f) and Point (%f, %f)" x1 y1 x2 y2
 
-  printfn("The distance between (%i, %i) and (%i, %i) is %i"
-  x1 y1 x2 y2 result)
+  // let result = distance x1 y1 x2 y2
+
+  // printfn "The distance between Point (%f, %f) and Point (%f, %f) is %f" x1 y1 x2 y2 result
