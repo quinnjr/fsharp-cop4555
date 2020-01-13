@@ -2,9 +2,9 @@
 // using the fibonacci sequence.
 
 let rec fibonacci i =
-  if i < 2
-  then 1
-  else fibonacci(i-2) + fibonacci(i-1)
+  match i < 2 with
+  | true -> 1
+  | false -> fibonacci(i-2) + fibonacci(i-1)
 
 printfn "%i" (fibonacci 2)
 printfn "%i" (fibonacci 6)

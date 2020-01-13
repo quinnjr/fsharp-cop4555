@@ -7,7 +7,6 @@
 let printit str =
   printfn "%s" str
 
+[<EntryPoint>]
 let main =
   printit "Hello World"
-
-main

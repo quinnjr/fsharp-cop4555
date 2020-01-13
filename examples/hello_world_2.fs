@@ -4,7 +4,6 @@
 // Adds a `main` function to the function call and `printfn` taking a
 // unit type as a parameter.
 
-let main () =
+[<EntryPoint>]
+let main =
   printfn "%s" "Hello World"
-
-main()
