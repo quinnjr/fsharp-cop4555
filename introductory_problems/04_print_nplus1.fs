@@ -17,4 +17,4 @@ let main args =
 
     out + 1
 
-  printfn "Sum from 1 to %d is %d" input zero_to_n input
+  printfn "Sum from 1 to %d is %d" input zero_to_n(input)
