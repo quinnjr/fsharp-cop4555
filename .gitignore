@@ -304,9 +304,11 @@ bin
 
 # End of https://www.gitignore.io/api/fsharp
 
-FSharp.Core.dll
 *
 !/**/
 !*.*
 !Makefile
 !**/*.fs
+
+FSharp.Core.dll
+**/FSharp.Core.dll

@@ -1,28 +1,10 @@
-#!/usr/bin/env
+#!/usr/bin/env sh
 
-MONO=$(which mono)
-FSC=$(which fsharpc)
-
-compile() {
-
-}
-
-run() {
-  mono $2
-}
-
-shift 1
-
-case $1 in
-  run)
-    $(MONO) $2
-    ;;
-
-  build)
-    $(FSC) --nologo --target:exe -o $2 $2.fs && chmod +x $2
-    ;;
-
-  *)
-    echo 'Invalid command.'
-    ;;
-esac
+if [ $# -lt 1 ]; then
+  echo 'No valid input was specified.'
+elif [ $# -gt 2 ]; then
+  echo 'Too many inputs.'
+else
+  $(which fsharpc) --nologo --target:exe -o:${1%.fs} $1 && chmod +x ${1%.fs}
+  $(which mono) ${1%.fs}
+fi

@@ -1,11 +1,15 @@
-//
-//
+// A program which takes an input value and prints the sum from 1 to input
 
 open System
 
-let rec zero_to_n i =
-  if i = 1 then 1
-  else zero_to_n i - 1
+// Recursive function to sum values from 1 to N
+let rec sum = function
+| 0 -> 0
+| 1 -> 1
+// Recursively call sum with an argument of i - 1
+// During spring-back from the base case, add the previous case to the
+// current number
+| i -> i + sum (i - 1)
 
 [<EntryPoint>]
 let main args =
@@ -21,7 +25,7 @@ let main args =
   // is correct input and None prints an error.
   match input with
   | Some i ->
-    let result = zero_to_n i
+    let result = sum i
     printfn "Sum from 1 to %d is %d" input.Value result
     0
   | None ->
