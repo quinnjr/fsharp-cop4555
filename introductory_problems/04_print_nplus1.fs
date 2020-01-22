@@ -1,20 +1,29 @@
 //
 //
 
+open System
+
+let rec zero_to_n i =
+  if i = 1 then 1
+  else zero_to_n i - 1
+
 [<EntryPoint>]
 let main args =
   printfn "Input a number: "
   // Wait for user input
-  // Use input is a string, so it must be parsed to an int
-  let input = match System.Console.ReadLine() |> Int32.TryParse with
-  | true, i -> i
-  | _ -> eprintfn "Unable to parse input into a valid integer"
+  // Use input is a string, so it must be parsed to an Int32.
+  let input =
+    match System.Console.ReadLine() |> System.Int32.TryParse with
+    | (true, i) -> Some(i)
+    | (false, _) -> None
 
-  let rec zero_to_n in =
-    let out = match in = 0 with
-    | true -> 0
-    | false -> zero_to_n in - 1
-
-    out + 1
-
-  printfn "Sum from 1 to %d is %d" input zero_to_n(input)
+  // Match input as an Option<T> where Some(T)
+  // is correct input and None prints an error.
+  match input with
+  | Some i ->
+    let result = zero_to_n i
+    printfn "Sum from 1 to %d is %d" input.Value result
+    0
+  | None ->
+    eprintfn "Unable to parse input into a valid integer"
+    -1
