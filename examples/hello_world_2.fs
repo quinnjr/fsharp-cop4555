@@ -7,3 +7,5 @@
 [<EntryPoint>]
 let main =
   printfn "%s" "Hello World"
+
+  0

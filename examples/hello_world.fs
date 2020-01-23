@@ -10,3 +10,5 @@ let printit str =
 [<EntryPoint>]
 let main =
   printit "Hello World"
+
+  0

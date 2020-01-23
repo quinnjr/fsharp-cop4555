@@ -5,5 +5,7 @@
 // unit type as a parameter.
 
 [<EntryPoint>]
-let main =
+let main args =
   printfn "%s" "Hello World"
+
+  0

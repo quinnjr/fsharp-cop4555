@@ -34,4 +34,5 @@ let main args =
     let result = distance points
 
     printfn "The distance between Point (%f, %f) and Point (%f, %f) is %f" points.[0].x points.[0].y points.[1].x points.[1].y result
+
     0
