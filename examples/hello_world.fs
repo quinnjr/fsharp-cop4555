@@ -8,7 +8,7 @@ let printit str =
   printfn "%s" str
 
 [<EntryPoint>]
-let main =
+let main args =
   printit "Hello World"
 
   0

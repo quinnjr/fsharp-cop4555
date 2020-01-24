@@ -18,3 +18,5 @@ let main args =
   | false ->
     // Print an error for no proper input
     eprintfn "Too few arguments specified"
+
+  0
