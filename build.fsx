@@ -7,6 +7,7 @@ nuget Fake.DotNet.MSBuild
 nuget Fake.IO.Filesystem //"
 #load "./.fake/build.fsx/intellisense.fsx"
 
+open System
 open Fake.Core
 open Fake.Core.TargetOperators
 open Fake.DotNet
@@ -29,8 +30,13 @@ Target.create "Build" (fun _ ->
   !! "**/*.fs"
   |> Seq.iter (fun input ->
     let output = Fake.Core.String.replace ".fs" "" input
-    Shell.Exec("fsharpc", "--nologo --target:exe -o:" + output + " " + input) |> ignore
+    Shell.AsyncExec("fsharpc", "--nologo --target:exe -o:" + output + " " + input)
+    // Todo: further research on FSharp Async
+    |> Async.RunSynchronously
+    |> ignore
     printfn "AppBuild-Output: %s -> %s" input output
+
+
   )
 )
 

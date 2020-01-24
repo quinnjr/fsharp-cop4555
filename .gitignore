@@ -317,3 +317,4 @@ build/
 bin/
 .fake
 build.fsx.lock
+.ionide
