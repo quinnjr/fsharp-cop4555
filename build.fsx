@@ -19,6 +19,9 @@ Target.create "Clean" (fun _ ->
   !! "**/*.fs"
   |> Seq.map (fun inp -> Fake.Core.String.replace ".fs" "" inp)
   |> Seq.iter (fun exe -> Shell.rm exe)
+
+  !! "**/FSharp.Core.dll"
+  |> Seq.iter (fun lib -> Shell.rm lib)
 )
 
 Target.create "Build" (fun _ ->
