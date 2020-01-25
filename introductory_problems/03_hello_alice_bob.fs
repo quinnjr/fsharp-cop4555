@@ -21,7 +21,7 @@ let main args =
 
   while line <> null do
     printfn "What is your name?: "
-    let input = input @ [line] @ []
+    let input = line :: input
 
   rprint input
 
