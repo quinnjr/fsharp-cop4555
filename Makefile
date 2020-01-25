@@ -8,16 +8,16 @@ else
 FSC := $(shell which fsharpc)
 endif
 
-INPUT = $(wildcard **/*.fs)
-OUTPUT = $(INPUT:.fs=)
+input := $(shell find . -type f -name "*.fs")
+output := $(input:.fs=)
 
 .PHONY: build clean
 
-build: $(OUTPUT)
+build: $(output)
 
-$(OUTPUT): $(INPUT)
-	$(FSC) --nologo --target:exe --out:$@ $<
+$(output): $(input)
+	$(FSC) --nologo --target:exe --out:$@ $(@:%=%.fs)
 
 clean:
-	$(foreach executable, $(INPUT:.fs=), $(RM) $(executable))
+	$(foreach executable, $(input:%.fs=%), $(RM) $(executable))
 	$(foreach dll, $(shell find . -type f -name "FSharp.Core.dll"), $(RM) $(dll))

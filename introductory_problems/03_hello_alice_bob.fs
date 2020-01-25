@@ -6,23 +6,18 @@
 
 open System
 
-let rec rprint arr =
-  match arr with
-  | p :: tail when p = "Bob" || p = "Alice" ->
-    printfn "Hello %s!" p
-    rprint tail
-  | _ :: tail -> rprint tail
-  | [] -> ()
-
 [<EntryPoint>]
 let main args =
-  let input = []
-  let line = Console.ReadLine()
+  let rec rprintfn l =
+    match l with
+    | [] -> printf ""
+    | head :: tail when head = "Alice" || head = "Bob"->
+      printfn "Hello %s!" head
+      rprintfn tail
+    | _ :: tail -> rprintfn tail
 
-  while line <> null do
-    printfn "What is your name?: "
-    let input = line :: input
+  let args = args |> List.ofArray
 
-  rprint input
+  rprintfn args
 
   0
