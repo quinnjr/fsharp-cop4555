@@ -8,7 +8,7 @@ else
 FSC := $(shell which fsharpc)
 endif
 
-input := $(shell find . -type f -name "*.fs" -size +1b)
+input := $(shell find . -type f -name "*.fs" -size +0b)
 output := $(input:.fs=)
 
 .PHONY: build clean
@@ -16,7 +16,9 @@ output := $(input:.fs=)
 build: $(output)
 
 $(output): $(input)
-	$(FSC) --nologo --target:exe --out:$@ $(@:%=%.fs)
+	if [ $$(@:%=%.fs) -nt $$@ ]; then \
+		$(FSC) --nologo --target:exe --out:$@ $(@:%=%.fs) \
+	fi
 
 clean:
 	$(foreach executable, $(input:%.fs=%), $(RM) $(executable))

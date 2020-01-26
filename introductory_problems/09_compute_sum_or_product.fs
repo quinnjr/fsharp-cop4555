@@ -8,6 +8,7 @@ let rec product = function
 | i -> i * product (i - 1)
 
 let rec sum = function
+| 0 -> 0
 | 1 -> 1
 | i -> i + sum (i - 1)
 
