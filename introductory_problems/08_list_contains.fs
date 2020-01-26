@@ -3,8 +3,8 @@
 let rec is_in_list elem list =
   match list with
   | [] -> false
-  | tail::head when head = elem -> true
-  | tail::head -> is_in_list elem tail
+  | head::tail when head = elem -> true
+  | head::tail -> is_in_list elem tail
 
 [<EntryPoint>]
 let main args =
