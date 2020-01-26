@@ -8,7 +8,7 @@ else
 FSC := $(shell which fsharpc)
 endif
 
-input := $(shell find . -type f -name "*.fs")
+input := $(shell find . -type f -name "*.fs" -size +1b)
 output := $(input:.fs=)
 
 .PHONY: build clean

@@ -3,11 +3,11 @@
 
 open System
 
-let product = function
+let rec product = function
 | 1 -> 1
 | i -> i * product (i - 1)
 
-let sum = function
+let rec sum = function
 | 1 -> 1
 | i -> i + sum (i - 1)
 
@@ -20,9 +20,9 @@ let main args =
     let operation = System.Console.ReadLine()
     let result =
       match operation with
-      | o = "product" -> product i
-      | o = "sum" -> sum i
-      | _ = -> eprintfn "Operation specified is not valid." -1
+      | o when o = "product" -> product i
+      | o when o = "sum" -> sum i
+      | _ -> eprintfn "Operation specified is not valid."; -1
     printfn "The result of running %s on %d is: %d" operation i result
     0
   | (false, _) -> eprintfn "Non-parseable value supplied"; -1
