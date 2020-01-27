@@ -13,11 +13,14 @@ let rec palindrome str =
 [<EntryPoint>]
 let main args =
   printf "Input a word to check as being a palindrome: "
+
   let word = Console.ReadLine()
   let word_list = [ for c in word -> c ]
 
+  printfn "%A" word_list
+
   match palindrome word_list with
-  | true -> printfn "%s is a palindrome"
-  | false -> printfn "%s is not a palindrome"
+  | true -> printfn "%s is a palindrome."
+  | false -> printfn "%s is not a palindrome."
 
   0
