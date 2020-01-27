@@ -6,7 +6,7 @@ let is_prime a b =
 [<EntryPoint>]
 let main args =
   let list = [ 1..30 ]
-  for i in list do
-    if is_prime then printf i else printf ""
+  for i of list do
+    if is_prime list[i] list[i+1] then printf i else printf ""
 
   0
