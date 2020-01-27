@@ -1,5 +1,7 @@
 // Write a function that tests whether a string is a palindrome.
 
+open System
+
 let rec palindrome str =
   match str with
   | [] -> true
@@ -12,3 +14,10 @@ let rec palindrome str =
 let main args =
   printf "Input a word to check as being a palindrome: "
   let word = Console.ReadLine()
+  let word_list = [ for c in word -> c ]
+
+  match palindrome word_list with
+  | true -> printfn "%s is a palindrome"
+  | false -> printfn "%s is not a palindrome"
+
+  0
