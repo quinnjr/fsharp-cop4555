@@ -3,9 +3,10 @@
 let interleave xs ys =
   let rec loop a b acc =
     match a, b with
-    | [], [] -> acc
-    | ahead::atail, bhead::btail -> loop atail btail (b :: a :: acc)
-  loop xs ys [] |> List.rev
+    | e, [] | [], e -> List.rev acc @ e
+    | ahead::atail, bhead::btail -> loop atail btail (bhead :: ahead :: acc)
+
+  loop xs ys []
 
 [<EntryPoint>]
 let main args =
