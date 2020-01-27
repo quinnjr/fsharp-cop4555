@@ -12,12 +12,12 @@ let rec sigma k max acc =
 
 [<EntryPoint>]
 let main args =
-  let start = 1.0
-  let max = (10.0 ** 6.0) // Exponential power f only works on floating-point types
+  let lower = 1.0
+  let upper = (10.0 ** 6.0)
 
-  let res = sigma start max 0.0
+  let res = sigma lower upper 0.0
   let res = res * 4.0
 
-  printfn "The computed sum is: %0f" res
+  printfn "The computed sum is: %f" res // res should be truncated pi
 
   0
