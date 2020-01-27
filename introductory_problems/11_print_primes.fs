@@ -7,4 +7,6 @@ let is_prime a b =
 let main args =
   let list = [ 1..30 ]
   for i in list do
-    if is_prime
+    if is_prime then printf i else printf ""
+
+  0

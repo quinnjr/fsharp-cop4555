@@ -8,15 +8,18 @@ else
 FSC := $(shell which fsharpc)
 endif
 
-input := $(shell find . -type f -name "*.fs" -size +0b)
-output := $(input:.fs=)
+#input := $(shell find . -type f -name "*.fs" -size +0b)
+input := $(wildcard **/*.fs)
+output := $(basename $(input))
 
 .PHONY: build clean
 
 build: $(output)
 
 $(output): $(input)
-	$(FSC) --nologo --target:exe --out:$@ $(@:%=%.fs)
+	[[ $@ -ot $(addsuffix .fs, $@) && -s $(addsuffix .fs, $@) ]] && \
+	  $(FSC) --nologo --target:exe --out:$@ $(addsuffix .fs, $@)
+
 
 clean:
 	$(foreach executable, $(input:%.fs=%), $(RM) $(executable))
