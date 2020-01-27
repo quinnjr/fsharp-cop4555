@@ -1,27 +1,18 @@
-#
-#
-#
-
 ifeq ($(OS),"Windows_NT")
 FSC := $(shell where fsc)
 else
 FSC := $(shell which fsharpc)
 endif
 
-makefiles := $(wildcard **/Makefile)
+input := $(wildcard *.fs)
+output := $(basename $(input))
 
-.PHONY: all clean
+.PHONY: build clean
 
-all: examples introductory_problems problem_set_1
+build: $(output)
 
-problem_set_1:
-	$(MAKE) -C problem_set_1
-
-introductory_problems:
-	$(MAKE) -C introductory_problems
-
-examples:
-	$(MAKE) -C examples
+$(output): $(input)
+	$(if [[ $@ -ot $(@:%=%.fs) && -s $(@:%=%.fs) ]], $(FSC) --nologo --target:exe --out:$@ $(@:%=%.fs))
 
 clean: $(output)
 	$(foreach executable, $(output), $(RM) $(executable))
