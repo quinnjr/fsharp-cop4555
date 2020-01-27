@@ -2,13 +2,14 @@
 
 open System
 
-let rec palindrome str =
-  match str with
-  | [] -> true
-  | head::tail when (tail.Item(tail.Length - 1)) <> head -> palindrome tail
-  | _ -> false
-    // let last = tail.Item(tail.Length - 1)
-    // if head <> last then false else palindrome tail
+let rec palindrome (str: char list) =
+  if str.Length = 1 then true
+  else
+    match str with
+    | [] -> true
+    | head::tail ->
+      let last = tail.Item(tail.Length - 1)
+      if head <> last then false else palindrome (tail.[.. (tail.Length - 2)])
 
 [<EntryPoint>]
 let main args =
@@ -17,10 +18,9 @@ let main args =
   let word = Console.ReadLine()
   let word_list = [ for c in word -> c ]
 
-  printfn "%A" word_list
+  let res = palindrome word_list
 
-  match palindrome word_list with
-  | true -> printfn "%s is a palindrome."
-  | false -> printfn "%s is not a palindrome."
+  if res then printfn "%s is a palindrome." word
+  else printfn "%s is not a palindrome." word
 
   0
