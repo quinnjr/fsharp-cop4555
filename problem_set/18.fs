@@ -3,15 +3,15 @@
 let interleave xs ys =
   let rec loop a b acc =
     match a, b with
-    | [], e | e, [] -> acc @ [e]
+    | [], [] -> acc
     | ahead::atail, bhead::btail -> loop atail btail (b :: a :: acc)
-  loop xs ys []
+  loop xs ys [] |> List.rev
 
 [<EntryPoint>]
 let main args =
 
-  let list1 =
-  let list2 =
+  let list1 = [1;2;3]
+  let list2 = [4;5;6]
 
   let list_final = interleave list1 list2
 
