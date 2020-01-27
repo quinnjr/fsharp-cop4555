@@ -8,7 +8,6 @@ else
 FSC := $(shell which fsharpc)
 endif
 
-#input := $(shell find . -type f -name "*.fs" -size +0b)
 input := $(wildcard **/*.fs)
 output := $(basename $(input))
 
@@ -17,8 +16,7 @@ output := $(basename $(input))
 build: $(output)
 
 $(output): $(input)
-	[[ $@ -ot $(addsuffix .fs, $@) && -s $(addsuffix .fs, $@) ]] && \
-	  $(FSC) --nologo --target:exe --out:$@ $(addsuffix .fs, $@)
+	$(if [[ $@ -ot $(@:%=%.fs) && -s $(@:%=%.fs) ]], $(FSC) --nologo --target:exe --out:$@ $(@:%=%.fs))
 
 
 clean:
