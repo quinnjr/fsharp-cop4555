@@ -1,5 +1,5 @@
 let revlists xs =
-  List.map (fun l -> List.rev l)
+  List.map (fun l -> List.rev l) xs
 
 [<EntryPoint>]
 let main args =
