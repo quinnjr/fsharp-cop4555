@@ -16,9 +16,7 @@ output := $(input:.fs=)
 build: $(output)
 
 $(output): $(input)
-	if [ $$(@:%=%.fs) -nt $$@ ]; then \
-		$(FSC) --nologo --target:exe --out:$@ $(@:%=%.fs) \
-	fi
+	$(FSC) --nologo --target:exe --out:$@ $(@:%=%.fs)
 
 clean:
 	$(foreach executable, $(input:%.fs=%), $(RM) $(executable))
