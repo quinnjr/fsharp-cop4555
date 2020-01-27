@@ -7,8 +7,8 @@ let rec sigma k max acc =
   match k = max with
   | true -> acc
   | false ->
-    let res = ((-1) ** (k + 1)) / ((2 * k) - 1)
-    sigma (k + 1) max (acc + res)
+    let res = ((-1.0) ** (k + 1.0)) / ((2.0 * k) - 1.0)
+    sigma (k + 1.0) max (acc + res)
 
 [<EntryPoint>]
 let main args =
