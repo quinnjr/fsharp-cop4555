@@ -2,12 +2,12 @@
 
 let rec gencut (i: int) (xs: int list) =
   match xs with
-  | head::tail ->
+  | head::tail when i < xs.Length ->
     let a, b = gencut (i + 1) tail
     head::a, b
-  | a -> [], a
+  | x -> [], x
 
-let cut (input: int list) = gencut ((List.length input) / 2) input
+let cut (input: int list) = gencut 2 input
 
 [<EntryPoint>]
 let main args =
