@@ -1,9 +1,13 @@
 // Write an F# function cut xs that cuts a list into two equal parts.
 
-let rec cut in =
-  let gencut i xs = function
-  | head::tail when i < in.Length -> gencut (i + 1) (head::xs) tail
-  | x -> (List.rev xs), x
+let rec gencut (i: int) (xs: int list) =
+  match xs with
+  | head::tail ->
+    let a, b = gencut (i + 1) tail
+    head::a, b
+  | a -> [], a
+
+let cut (input: int list) = gencut ((List.length input) / 2) input
 
 [<EntryPoint>]
 let main args =
@@ -11,4 +15,7 @@ let main args =
 
   let final = cut initial
 
-  printfn "Initial list: "
+  printfn "Initial list: %A" initial
+  printfn "Final list: %A" final
+
+  0
