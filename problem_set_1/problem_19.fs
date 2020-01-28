@@ -1,13 +1,14 @@
 // Write an F# function cut xs that cuts a list into two equal parts.
 
 let rec gencut (i: int) (xs: int list) =
-  match xs with
-  | head::tail when i < xs.Length ->
-    let a, b = gencut (i + 1) tail
-    head::a, b
-  | x -> [], x
+  let rec accumulator = function
+  | 0, a, b -> (List.rev a, b)
+  | n, a, [] -> a, []
+  | n, a, bhead::btail -> accumulator ((n-1), (bhead::a), btail)
 
-let cut (input: int list) = gencut 2 input
+  accumulator (i, [], xs)
+
+let cut (input: int list) = gencut ((List.length input / 2)) input
 
 [<EntryPoint>]
 let main args =
