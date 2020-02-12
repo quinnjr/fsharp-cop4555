@@ -12,7 +12,10 @@ makefiles := $(wildcard **/Makefile)
 
 .PHONY: all clean
 
-all: examples introductory_problems problem_set_1
+all: examples introductory_problems problem_set_1 problem_set_2
+
+problem_set_2:
+	$(MAKE) -C problem_set_2
 
 problem_set_1:
 	$(MAKE) -C problem_set_1
