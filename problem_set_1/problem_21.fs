@@ -1,8 +1,6 @@
-(*
-  Write an F# function countshuffles n that counts how many calls
-  to shuffle on a deck of n distinct "cards" it takes to put the deck back
-  into its original order.
-*)
+// Write an F# function countshuffles n that counts how many calls
+// to shuffle on a deck of n distinct "cards" it takes to put the deck back
+// into its original order.
 
 module Shuffle =
   let interleave xs ys =
@@ -29,19 +27,18 @@ module Shuffle =
 
 open Shuffle
 
-let countaux (deck : list 'a) (target : list 'a) : int =
-  let count_internal (d : list 'a) (acc : int) : int =
-    if target <> d then count_internal((shuffle d) acc+1) else acc
+let rec countaux deck target =
+  match deck <> target with
+  | false -> 0
+  | true -> 1 + countaux (shuffle deck) target
 
-  count_internal deck 0
-
-let countshuffles n =
+let countshuffles (n: int) =
   let target = [ 0 .. n ]
   let deck = shuffle target
-  countaux deck target
+  1 + countaux deck target
 
 [<EntryPoint>]
 let main args =
   printfn "Number of shuffles on a deck of 4 cards: %d" (countshuffles 4)
-
+  printfn "Number of shuffles on a deck of 52 cards: %d" (countshuffles 52)
   0
