@@ -1,5 +1,8 @@
-// Write an F# function shuffle xs that takes an even-length list, cuts it into
-// two equal-sized pieces, and then interleaves the pieces:
+(*
+  Write an F# function countshuffles n that counts how many calls
+  to shuffle on a deck of n distinct "cards" it takes to put the deck back
+  into its original order.
+*)
 
 module Shuffle =
   let interleave xs ys =
@@ -26,13 +29,19 @@ module Shuffle =
 
 open Shuffle
 
+let countaux (deck : list 'a) (target : list 'a) : int =
+  let count_internal (d : list 'a) (acc : int) : int =
+    if target <> d then count_internal((shuffle d) acc+1) else acc
+
+  count_internal deck 0
+
+let countshuffles n =
+  let target = [ 0 .. n ]
+  let deck = shuffle target
+  countaux deck target
+
 [<EntryPoint>]
 let main args =
-  let initial = [1;2;3;4;5;6;7;8]
-
-  let shuffled = shuffle initial
-
-  printfn "Initial list: %A" initial
-  printfn "Final list: %A" shuffled
+  printfn "Number of shuffles on a deck of 4 cards: %d" (countshuffles 4)
 
   0
