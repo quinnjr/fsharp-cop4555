@@ -1,12 +1,15 @@
 // Write an F# function interleave(xs,ys) that interleaves two lists
 
-let interleave xs ys =
-  let rec loop a b acc =
-    match a, b with
-    | e, [] | [], e -> List.rev acc @ e
-    | ahead::atail, bhead::btail -> loop atail btail (bhead :: ahead :: acc)
+module Interleave =
+  let interleave xs ys =
+    let rec loop a b acc =
+      match a, b with
+      | e, [] | [], e -> List.rev acc @ e
+      | ahead::atail, bhead::btail -> loop atail btail (bhead :: ahead :: acc)
 
-  loop xs ys []
+    loop xs ys []
+
+open Interleave
 
 [<EntryPoint>]
 let main args =
