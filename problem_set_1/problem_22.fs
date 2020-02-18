@@ -5,11 +5,11 @@
   order.)
 *)
 
-let rec acc_cartesian acc = function
-| ([], []) -> acc
-| (x::xs, y::ys) -> acc_cartesian (x,y)::acc xs ys
+let rec cartesian_rec = function
+| (_, []) | ([], _) -> ([], [])
+| x::xs, ys -> List.map (fun y -> (x, y)) ys @ cartesian_rec (xs, ys)
 
-let rec cartesian xs ys = acc_cartensian [] (xs, ys)
+let cartesian xs ys = cartesian_rec (xs, ys)
 
 [<EntryPoint>]
 let main _ =
