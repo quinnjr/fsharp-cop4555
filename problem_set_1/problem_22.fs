@@ -5,9 +5,9 @@
   order.)
 *)
 
-let rec cartesian_rec = function
+let rec cartesian_rec acc = function
 | (_, []) | ([], _) -> ([], [])
-| x::xs, ys -> List.map (fun y -> (x, y)) ys @ cartesian_rec (xs, ys)
+| x::xs, ys -> List.map (fun y -> (x, y)) ys :: acc :: cartesian_rec acc (xs, ys)
 
 let cartesian xs ys = cartesian_rec (xs, ys)
 
