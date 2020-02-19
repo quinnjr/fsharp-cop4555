@@ -5,16 +5,14 @@
   order.)
 *)
 
-let rec cartesian xs ys =
-  let rec cart_rec = function
-  | [],_ | _, [] -> []
-  | [x], ys -> List.map (fun y -> (x, y)) ys
-  | x::xs, ys -> (List.map (fun y -> (x, y)) ys) :: cart_rec (xs, ys)
+let rec cart_rec = function
+| [],_ | _, [] -> []
+| x::xs, ys -> (List.map (fun y -> (x, y)) ys) :: cart_rec (xs, ys)
 
-  cart_rec (xs, ys)
+let cartesian xs ys = cart_rec (xs, ys)
 
 [<EntryPoint>]
 let main _ =
-  printfn "%A" cartesian ["a"; "b"; "c"] [1; 2]
+  printfn "%A" (cartesian ["a"; "b"; "c"] [1; 2])
 
   0

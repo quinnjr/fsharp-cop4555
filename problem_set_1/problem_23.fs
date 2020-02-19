@@ -6,9 +6,10 @@
 
 let rec powerset = function
 | [] -> [[]]
-| x::xs -> List.collect (fun xs' -> [xs', x::xs']) powerset xs
+| x::xs -> List.collect (fun y -> [y; x::y]) (powerset xs)
 
+[<EntryPoint>]
 let main _ =
-  printfn "%A" powerset [1 .. 3]
+  printfn "%A" (powerset [1 .. 3])
 
   0
