@@ -13,7 +13,7 @@ type Name = {
 }
 
 type GPA = {
-  Numberical: float;
+  Numerical: float;
   Letter: string;
 }
 
@@ -21,11 +21,31 @@ type Credits = {
   Hours: int;
 }
 
+type Student = {
+  Name: Name;
+  Credits: Credits;
+  GPA: GPA;
+}
+
 [<EntryPoint>]
 let main _ =
-  let student = { Name.First = "Jones", Credits.Hours = 109,
-    GPA.Numberical = 3.85 }
+  let student: Student = {
+    Name = {
+      First = "";
+      Middle = None;
+      Last = "Jones";
+      Prefix = None;
+      Suffix = None;
+    };
+    Credits = {
+      Hours = 109;
+    };
+    GPA = {
+      Numerical = 3.85;
+      Letter = "";
+    };
+  }
 
-  printfn "The record instant requested is %A" Student
+  printfn "The record instant requested is %A" student
 
   0
