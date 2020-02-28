@@ -10,7 +10,7 @@
   We work recursively on a matrix list M, looking at the matrix as its
   first list (x::xs) and the tail of the matrix ys.
 
-  If the matrix is empty of the head of the matrix is empty, return an empty
+  If the matrix is empty or the head of the matrix is empty, return an empty
   list.
 
   If we still have a matrix to transpose, use List.head as the transformation
