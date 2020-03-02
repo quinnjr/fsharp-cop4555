@@ -22,9 +22,9 @@ type Coordinate<'a> =
 
 let reduce_coordinate f (t: Coordinate<'a>) =
   match t with
-  | Tuple (x, y) -> f(x, f(y, Unchecked.defaultof<x>))
-  | Triple (x, y, z) -> f(x, f(y, f(z, Unchecked.defaultof<x>)))
-  | Quadruple (w, x, y, z) -> f(w, f(x, f(y, f(z, Unchecked.defaultof<x>))))
+  | Tuple (x, y) -> f(x, f(y, Unchecked.defaultof<'a>))
+  | Triple (x, y, z) -> f(x, f(y, f(z, Unchecked.defaultof<'a>)))
+  | Quadruple (w, x, y, z) -> f(w, f(x, f(y, f(z, Unchecked.defaultof<'a>))))
 
 [<EntryPoint>]
 let main _ =
