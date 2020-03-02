@@ -20,7 +20,7 @@ type Coordinate<'a> =
 | Triple of 'a * 'a * 'a
 | Quadruple of 'a * 'a * 'a * 'a
 
-let reduce_coordinate f (t: Coordinate<'a>) =
+let reduce_coordinate f (t: Coordinate<'a>): 'a =
   match t with
   | Tuple (x, y) -> f(x, f(y, Unchecked.defaultof<'a>))
   | Triple (x, y, z) -> f(x, f(y, f(z, Unchecked.defaultof<'a>)))
@@ -33,11 +33,11 @@ let main _ =
   let tripl = Coordinate.Triple (1.0, 2.0, 3.0)
   let quadrpl = Coordinate.Quadruple ("0", "1", "2", "3")
 
-  let tupl_red1 = reduce_coordinate (fun acc elem -> acc + elem) tupl
+  let tupl_red1 = reduce_coordinate(fun acc elem -> acc + elem) tupl
   let tupl_red2 = reduce_coordinate (fun acc elem -> acc - elem) tupl
 
-  let tripl_red1 = reduce_coordinate (fun acc elem -> acc + elem) tripl
-  let tripl_red2 = reduce_coordinate (fun acc elem -> acc - elem) tripl
+  let tripl_red1 = reduce_coordinate(fun acc elem -> acc + elem) tripl
+  let tripl_red2 = reduce_coordinate(fun acc elem -> acc - elem) tripl
 
   printfn "%A" tupl
   printfn "%A" tripl
@@ -45,5 +45,8 @@ let main _ =
 
   printfn "%A" tupl_red1
   printfn "%A" tupl_red2
+
+  printfn "%A" tripl_red1
+  printfn "%A" tripl_red2
 
   0
