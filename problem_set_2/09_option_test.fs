@@ -1,23 +1,30 @@
 // Project to show the uses of the option type.
 
-let list_print = function
-| (xs, None) -> printfn "The last element of %A is %s." xs "\"Invalid Input\""
-| (xs, Some(value)) -> printfn "The last element of %A is %A." xs value
-
 let rec check_list = function
 | [] -> None
-| [x] -> Some(x)
-| x::xs -> check_list xs
+| [x] -> Some(sprintf "%A" x)
+| _::xs -> check_list xs
+
+let printNone xs = printfn "The last element of %A is %s." xs "\"Invalid Input\""
+let printSome xs x = printfn "The last element of %A is %s." xs x
 
 [<EntryPoint>]
 let main args =
 
-  let li1 = []
-  let li2 = ["cat";]
-  let li3 = [1;2;3;4;5]
+  let list1 = []
+  let list2 = ["cat"]
+  let list3 = [1..5]
 
-  list_print (li1, check_list li1)
-  list_print (li2, check_list li2)
-  list_print (li3, check_list li3)
+  match check_list list1 with
+  | None -> printNone list1
+  | Some(x) -> printSome list1 x
+
+  match check_list list2 with
+  | None -> printNone list2
+  | Some(x) -> printSome list2 x
+
+  match check_list list3 with
+  | None -> printNone list3
+  | Some(x) -> printSome list3 x
 
   0
