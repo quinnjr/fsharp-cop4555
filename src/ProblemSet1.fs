@@ -6,10 +6,17 @@ namespace io.QuinnJR
 
 module ProblemSet1
 
+  (*
+    Write an F# function revlists xs that takes a list of lists xs and reverses
+    all the sub-lists.
+  *)
   module Problem17
     let revlists xs =
       List.map (fun l -> List.rev l) xs
 
+  (*
+    Write an F# function interleave(xs,ys) that interleaves two lists.
+  *)
   module Problem18
     let interleave xs ys =
       let rec loop a b acc =
@@ -19,6 +26,9 @@ module ProblemSet1
 
       loop xs ys []
 
+  (*
+    Write an F# function cut xs that cuts a list into two equal parts.
+  *)
   module Problem19
     let rec gencut (i: int) (xs: int list) =
       let rec accumulator = function
@@ -30,11 +40,20 @@ module ProblemSet1
 
     let cut (input: int list) = gencut ((List.length input / 2)) input
 
+  (*
+    Write an F# function shuffle xs that takes an even-length list, cuts it into
+    two equal-sized pieces, and then interleaves the pieces:
+  *)
   module Problem20
     let shuffle xs =
       let ha, hb = cut xs
       interleave ha hb
 
+  (*
+    Write an F# function countshuffles n that counts how many calls
+    to shuffle on a deck of n distinct "cards" it takes to put the deck back
+    into its original order.
+  *)
   module Problem21
     let rec countaux deck target =
       match deck <> target with
@@ -46,6 +65,12 @@ module ProblemSet1
       let deck = shuffle target
       1 + countaux deck target
 
+  (*
+    Write an uncurried F# function cartesian (xs, ys) that takes as input two
+    lists xs and ys and returns a list of pairs that represents the Cartesian
+    product of xs and ys. (The pairs in the Cartesian product may appear in any
+    order).
+  *)
   module Problem22
     let rec cart_rec = function
     | [],_ | _, [] -> []
@@ -53,6 +78,11 @@ module ProblemSet1
 
     let cartesian xs ys = cart_rec (xs, ys)
 
+  (*
+    An F# list can be thought of as representing a set, where the order of the
+    elements in the list is irrelevant. Write an F# function powerset such that
+    powerset set returns the set of all subsets of set. For example,
+  *)
   module Problem23
     let rec powerset = function
     | [] -> [[]]
@@ -64,6 +94,9 @@ open ProblemSet1.Problem18
 open ProblemSet1.Problem19
 open ProblemSet1.Problem20
 open ProblemSet1.Problem21
+open ProblemSet1.Problem22
+open ProblemSet1.Problem23
+open ProblemSet1.Problem24
 
 [<EntryPoint>]
 let main _ =
