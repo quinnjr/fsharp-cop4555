@@ -20,6 +20,7 @@ namespace ProblemSet2
 
   Be sure that your function implements the normal associativity for (-).
 *)
+(*
 module Problem02 =
 
   type Coordinate<'T> =
@@ -56,7 +57,7 @@ module Problem02 =
                         else ""
                       ) acc
                     ) quadrpl
-
+*)
 (*
   Print an accept message when the input is valid and completely consumed.
   Generate appropriate error messages for incorrect symbols, not enough input,
