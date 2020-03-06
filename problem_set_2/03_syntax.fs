@@ -1,7 +1,7 @@
 (*
-Print an accept message when the input is valid and completely consumed.
-Generate appropriate error messages for incorrect symbols, not enough input,
-and too much input.
+  Print an accept message when the input is valid and completely consumed.
+  Generate appropriate error messages for incorrect symbols, not enough input,
+  and too much input.
 *)
 
 type TERMINAL = IF|THEN|ELSE|BEGIN|END|PRINT|SEMICOLON|ID|EOF

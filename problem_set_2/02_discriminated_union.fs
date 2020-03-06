@@ -16,11 +16,11 @@ Call the function with (-) for the numeric Coordinates in part (b).
 Be sure that your function implements the normal associativity for (-).
 *)
 
-type Coordinate<'T> =
-  | Tuple of 'T * 'T
-  | Triple of 'T * 'T * 'T
-  | Quadruple of 'T * 'T * 'T * 'T
-  static member reduce_coordinate (f: 'T -> 'T -> 'T) (coord: Coordinate<'T>): 'T =
+type Coordinate =
+  | Tuple of 'a * 'a
+  | Triple of 'a * 'a * 'a
+  | Quadruple of 'a * 'a * 'a * 'a
+  static member reduce_coordinate (f: 'a -> 'a -> 'a) (coord: Coordinate): 'a =
     match coord with
     | Tuple (x, y) -> f(x, f(y, Unchecked.defaultof<'T>))
     | Triple (x, y, z) -> f(x, f(y, f(z, Unchecked.defaultof<'T>)))
