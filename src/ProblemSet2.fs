@@ -177,10 +177,45 @@ module Problem06 =
   let test () =
     printfn "%A" (multi [[1;2;3];[4;5;6]] [[0;1];[3;2];[1;2]])
 *)
-(*
-module Problem07
+
+module Problem08
+
+  ///                                                                        \\\
+  ///          https://lukemerrett.com/timing-a-function-in-fsharp/          \\\
+  open System.Diagnostics
+
+  type TimedOpration<'T> = { millisecondsTaken: int64; returnedValue:'T}
+
+  let timeOperation<'T> (func: unit -> 'T): TimedOperation<'T> =
+    let timer = new Stopwatch()
+    timer.Start()
+    let returnValue = func()
+    timer.Stop()
+    {millisecondsTaken=timer.ElapsedMilliseconds; returnedValue=returnValue}
+  ///                                                                        \\\
+
+  let rec fold f a = function
+    | []    -> a
+    | x::xs -> fold f (f a x) xs;;
+
+  let rec foldBack f xs a =
+        match xs with
+        | []    -> a
+        | y::ys -> f y (foldBack f ys a);;
+
+  let flatten1 xs = fold (@) [] xs
+  let flatten2 xs = foldBack (@) xs
+
   let test () =
-*)
+    let xs = [[0];[1];[2];[3];[4];[5];[6];[7];[8];[9];[10];[11];[12];[13];[14];[15];[16];[17];[18];[19];]
+
+    let t1 = timeOperation (fun () -> flatten1 xs)
+    let t2 = timeOperation (fun () -> flatten2 xs)
+
+    printfn "Elapsed time of flatten1: %i" t1.millisecondsTaken
+    printfn "Elapsed time of flatten2: %i" t2.millisecondsTaken
+    printfn
+
 module Problem09 =
   let rec check_list = function
   | [] -> None
