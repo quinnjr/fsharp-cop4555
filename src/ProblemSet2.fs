@@ -3,6 +3,29 @@
 ///
 
 namespace ProblemSet2
+
+(*
+  To this end, define an F# function curry f that converts an uncurried
+  function to a curried function, and an F# function uncurry f that does
+  the opposite conversion.
+*)
+module Problem1
+
+  let curry f = (fun a -> fun b -> f(a, b))
+
+  let uncurry f = (fun a -> fun b -> f a b)
+
+  let test () =
+    let t = (+)
+
+    let plus = uncurry t
+
+    printfn "%A" <| plus (2,3)
+
+    let cplus = curry plus
+    let plus3 = cplus 3
+    printfn "%A" <| plus3 10
+
 (*
   Create a discriminated union for Coordinates that can be a Tuple, Threeple or
   Fourple that represent tuples of size two, three and four. The type for the
