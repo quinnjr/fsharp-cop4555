@@ -9,22 +9,25 @@ namespace ProblemSet2
   function to a curried function, and an F# function uncurry f that does
   the opposite conversion.
 *)
-module Problem1
+module Problem01 =
 
-  let curry f = (fun a -> fun b -> f(a, b))
+  let uncurry f = (fun (a, b) -> f a b)
 
-  let uncurry f = (fun a -> fun b -> f a b)
+  let curry f = (fun a -> fun b -> f (a, b))
 
   let test () =
-    let t = (+)
 
-    let plus = uncurry t
+    printfn "-- Problem 01 --"
 
-    printfn "%A" <| plus (2,3)
+    let add a b = a + b
+
+    let plus = uncurry add
+
+    printfn "%A" (plus (2, 3))
 
     let cplus = curry plus
     let plus3 = cplus 3
-    printfn "%A" <| plus3 10
+    printfn "%A" (plus3 10)
 
 (*
   Create a discriminated union for Coordinates that can be a Tuple, Threeple or
@@ -80,7 +83,7 @@ module Problem02 =
                         else ""
                       ) acc
                     ) quadrpl
-*)
+
 (*
   Print an accept message when the input is valid and completely consumed.
   Generate appropriate error messages for incorrect symbols, not enough input,
@@ -117,6 +120,7 @@ module Problem03 =
         failwith "Syntax tree rejected. Not a program is you."
 
   let test () =
+    printfn "-- Problem 03 --"
     [IF;ID;THEN;BEGIN;PRINT;ID;SEMICOLON;PRINT;ID;END;ELSE;PRINT;ID;EOF]
     |> test_program
     [IF;ID;THEN;IF;ID;THEN;PRINT;ID;ELSE;PRINT;ID;ELSE;BEGIN;PRINT;ID;END;EOF]
@@ -133,7 +137,8 @@ module Problem03 =
 module Problem04 =
 
   let test () =
-
+        printfn "-- Problem 04 --"
+*)
 (*
   Given vectors u = (u1, u2,..., un) and v = (v1, v2,..., vn),
   the inner product of u and v is defined to be u1*v1 + u2*v2 + ... + un*vn.
@@ -147,40 +152,36 @@ module Problem05 =
   | (x::xs, y::ys) -> (x * y) + sigma (xs, ys) *)
 
   let rec sigma acc = function
+  | xs, ys when List.length xs <> List.length ys ->
+    failwith "Exception: Lists are of unequal length"
   | ([], []) | (_, []) | ([], _) -> acc
   | (x::xs, y::ys) -> sigma ((x * y) + acc) (xs, ys)
 
-  let rec inner xs ys =
-    if List.length xs <> List.length ys then
-      failwith "Exception: Lists are of unequal length"
-    // else sigma (xs, ys)
-    else sigma 0I (xs, ys)
+  let rec inner xs ys = sigma 0I (xs, ys)
 
-  let test () = printfn "%A" <| inner [1I..50000I] [50001I..100000I]
-
-
+  let test () =
+    printfn "-- Problem 05 --"
+    printfn "%A" <| inner [1I..50000I] [50001I..100000I]
+(*
 module Problem06 =
   open ProblemSet1.Problem24
 
-  let rec inner xs ys =
-    if List.length xs <> List.length ys then
-      failwith "Exception: Lists are of unequal length"
-    else
-      let rec sigma acc = function
-      | ([], []) | (_, []) | ([], _) -> acc
-      | (x::xs, y::ys) -> sigma ((x * y) + acc) (xs, ys)
-      sigma 0 (xs, ys)
+  let rec inner acc = function
+  | xs, ys when List.length xs <> List.length ys ->
+    failwith "Exception: Lists are of unequal length"
+  | ([], []) | (_, []) | ([], _) -> acc
+  | (x::xs, y::ys) -> inner ((x * y)::acc) (xs, ys)
 
-  let multiply xs ys = inner xs (transpose ys)
+  let multi xs ys = inner [] (xs, (transpose ys))
 
   let test () =
-    printfn "%A" <| multiply ([[1;2;3];[4;5;6]], [[0;1];[3;2];[1;2]])
-
+    printfn "%A" (multi [[1;2;3];[4;5;6]] [[0;1];[3;2];[1;2]])
+*)
 (*
 module Problem07
   let test () =
 *)
-module Problem09
+module Problem09 =
   let rec check_list = function
   | [] -> None
   | [x] -> Some(sprintf "%A" x)
@@ -254,48 +255,54 @@ module Problem11 =
 
     printfn "The record instant requested is %A" student
 
-module Problem12
+module Problem12 =
 
-  type BinarySearchTree<'T> =
-  | Empty
-  | Node of value: 'T * left: BinarySearchTree<'T> * right: BinarySearchTree<'T>
-  static member remove (value: 'T) (tree: BinarySearchTree<'T>)  =
-    let rec predecessor tr =
-      match tr with
+  type BinarySearchTree<'a> =
+    | Empty
+    | Node of value: 'a * left: BinarySearchTree<'a> * right: BinarySearchTree<'a>
+    static member remove value tree =
+      let rec rimraf v = function
       | Empty -> Empty
-      | Node (_, _, Empty) -> tree
-      | Node (_, _, right) -> predecessor right
-
-    let rec rimraf value tr =
-      match tr with
-      | Empty -> Empty
-      | Node(value', left, right) when value < value' ->
-      | Node(value', left, right) when value > value' ->
+      | Node(v', left, right) when v < v' ->
+        let left' = rimraf v left
+        Node(v', left', right)
+      | Node(v', left, right) when v > v' ->
+        let right' = rimraf v right
+        Node(v', left, right')
       | Node(_, Empty, Empty) -> Empty
       | Node(_, left, Empty) -> left
       | Node(_, Empty, right) -> right
       | Node(_, left, right) ->
-        let Node(value', _, _) = predecessor left
-        let left' = rimraf value' left
-        Node(value', left' right)
+        let (Node(v', _, _)) = BinarySearchTree.predecessor left
+        let left' = rimraf v' left
+        Node(v', left', right)
+
+      rimraf value tree
+    static member private predecessor tree =
+      match tree with
+      | Empty -> Empty
+      | Node (_, _, Empty) -> tree
+      | Node (_, _, right) -> BinarySearchTree.predecessor right
+
 
   let test () =
 
-    let tree = Node(10,
-      Node(5,
-        Node(2, Empty, Empty),
-        Node(7, Empty, Empty)
-      ),
-      Node(20,
-        Node(15, Empty, Empty),
-        Node(30,
-          Node(17, Empty, Empty),
-          Node(25, Empty, Empty)
+    let tree =
+      Node(10,
+        Node(5,
+          Node(2, Empty, Empty),
+          Node(7, Empty, Empty)
+        ),
+        Node(20,
+          Node(15, Empty, Empty),
+          Node(30,
+            Node(17, Empty, Empty),
+            Node(25, Empty, Empty)
+          )
         )
       )
-    )
 
-    BinarySeachTree.delete 30 tree
+    BinarySearchTree.remove 30 tree
 
 (*
 module Problem13
