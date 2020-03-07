@@ -3,6 +3,32 @@
 ///
 
 namespace ProblemSet2
+
+(*
+  To this end, define an F# function curry f that converts an uncurried
+  function to a curried function, and an F# function uncurry f that does
+  the opposite conversion.
+*)
+module Problem01 =
+
+  let uncurry f = (fun (a, b) -> f a b)
+
+  let curry f = (fun a -> fun b -> f (a, b))
+
+  let test () =
+
+    printfn "-- Problem 01 --"
+
+    let add a b = a + b
+
+    let plus = uncurry add
+
+    printfn "%A" (plus (2, 3))
+
+    let cplus = curry plus
+    let plus3 = cplus 3
+    printfn "%A" (plus3 10)
+
 (*
   Create a discriminated union for Coordinates that can be a Tuple, Threeple or
   Fourple that represent tuples of size two, three and four. The type for the
@@ -20,6 +46,7 @@ namespace ProblemSet2
 
   Be sure that your function implements the normal associativity for (-).
 *)
+(*
 module Problem02 =
 
   type Coordinate<'T> =
@@ -93,6 +120,7 @@ module Problem03 =
         failwith "Syntax tree rejected. Not a program is you."
 
   let test () =
+    printfn "-- Problem 03 --"
     [IF;ID;THEN;BEGIN;PRINT;ID;SEMICOLON;PRINT;ID;END;ELSE;PRINT;ID;EOF]
     |> test_program
     [IF;ID;THEN;IF;ID;THEN;PRINT;ID;ELSE;PRINT;ID;ELSE;BEGIN;PRINT;ID;END;EOF]
@@ -109,7 +137,8 @@ module Problem03 =
 module Problem04 =
 
   let test () =
-
+        printfn "-- Problem 04 --"
+*)
 (*
   Given vectors u = (u1, u2,..., un) and v = (v1, v2,..., vn),
   the inner product of u and v is defined to be u1*v1 + u2*v2 + ... + un*vn.
@@ -123,42 +152,108 @@ module Problem05 =
   | (x::xs, y::ys) -> (x * y) + sigma (xs, ys) *)
 
   let rec sigma acc = function
+  | xs, ys when List.length xs <> List.length ys ->
+    failwith "Exception: Lists are of unequal length"
   | ([], []) | (_, []) | ([], _) -> acc
   | (x::xs, y::ys) -> sigma ((x * y) + acc) (xs, ys)
 
-  let rec inner xs ys =
-    if List.length xs <> List.length ys then
-      failwith "Exception: Lists are of unequal length"
-    // else sigma (xs, ys)
-    else sigma 0I (xs, ys)
+  let rec inner xs ys = sigma 0I (xs, ys)
 
-  let test () = printfn "%A" <| inner [1I..50000I] [50001I..100000I]
-
+  let test () =
+    printfn "-- Problem 05 --"
+    printfn "%A" <| inner [1I..50000I] [50001I..100000I]
 
 module Problem06 =
-  open ProblemSet1.Problem24
+  open ProblemSet1
 
-  let rec inner xs ys =
-    if List.length xs <> List.length ys then
-      failwith "Exception: Lists are of unequal length"
-    else
-      let rec sigma acc = function
-      | ([], []) | (_, []) | ([], _) -> acc
-      | (x::xs, y::ys) -> sigma ((x * y) + acc) (xs, ys)
-      sigma 0 (xs, ys)
+  let private reducer = (fun acc elem -> acc + elem)
 
-  let multiply xs ys = inner xs (transpose ys)
+  let rec private inner acc = function
+  | xs, ys when (List.length xs) <> (List.length ys) ->
+    failwith "Exception: Lists are of unequal length"
+  | [], [] -> acc
+  | x::xs', y::ys' ->
+    inner ([List.reduce reducer x; List.reduce reducer y]::acc) (xs', ys')
+
+  let multiply xs ys = inner [] (xs, (Problem24.transpose ys))
 
   let test () =
-    printfn "%A" <| multiply ([[1;2;3];[4;5;6]], [[0;1];[3;2];[1;2]])
+    printfn "-- Problem 06 --"
+    printfn "%A" <| multiply [[1;2;3];[4;5;6]] [[0;1];[3;2];[1;2]]
+    // expected [[9; 11]; [21;26]]
+
+module Problem08 =
+  (*          https://lukemerrett.com/timing-a-function-in-fsharp/            *)
+  open System.Diagnostics
+
+  type TimedOperation<'T> = {
+    millisecondsTaken: System.TimeSpan;
+    returnedValue: 'T
+  }
+
+  let timeOperation<'T> (func: unit -> 'T): TimedOperation<'T> =
+    let timer = new Stopwatch()
+    timer.Start()
+    let returnValue = func()
+    timer.Stop()
+    { millisecondsTaken = timer.Elapsed;
+      returnedValue = returnValue }
+  (*                                                                          *)
+
+  let rec fold f a = function
+  | []    -> a
+  | x::xs -> fold f (f a x) xs
+
+  let rec foldBack f xs a =
+    match xs with
+    | []    -> a
+    | y::ys -> f y (foldBack f ys a)
+
+  let flatten1 xs = fold (@) [] xs
+  let flatten2 xs = foldBack (@) xs []
+
+  let test () =
+    let xs = [[0];[1];[2];[3];[4];[5];[6];[7];[8];[9];[10];[11];[12];[13];[14];[15];[16];[17];[18];[19];]
+
+    let t1 = timeOperation (fun () -> flatten1 xs)
+    let t2 = timeOperation (fun () -> flatten2 xs)
+
+    printfn "-- Problem 08 --"
+
+    printfn "Value of t1: %A" t1.returnedValue
+    printfn "Elapsed time of flatten1: %A" t1.millisecondsTaken
+    printfn "Value of t2: %A" t2.returnedValue
+    printfn "Elapsed time of flatten2: %A" t2.millisecondsTaken
+    printfn "Elapsed time of flatten1 vs flatten2: %A" (t1.millisecondsTaken - t2.millisecondsTaken)
+
+module Problem09 =
+  let rec check_list = function
+  | [] -> None
+  | [x] -> Some(sprintf "%A" x)
+  | _::xs -> check_list xs
+
+  let printNone xs = printfn "The last element of %A is %s." xs "\"Invalid Input\""
+  let printSome xs x = printfn "The last element of %A is %s." xs x
+
+  let test () =
+    printfn "-- Problem 09 --"
+    let list1 = []
+    let list2 = ["cat"]
+    let list3 = [1..5]
+
+    match check_list list1 with
+    | None -> printNone list1
+    | Some(x) -> printSome list1 x
+
+    match check_list list2 with
+    | None -> printNone list2
+    | Some(x) -> printSome list2 x
+
+    match check_list list3 with
+    | None -> printNone list3
+    | Some(x) -> printSome list3 x
 
 (*
-module Problem07
-  let test () =
-
-module Problem09
-  let test () =
-
 module Problem10
   let test () =
 *)
@@ -186,6 +281,7 @@ module Problem11 =
     Credits: Credits;
     GPA: GPA;
   }
+
   let test () =
     let student: Student = {
       Name = {
@@ -204,50 +300,59 @@ module Problem11 =
       };
     }
 
+    printfn "-- Problem 11 --"
     printfn "The record instant requested is %A" student
 
-module Problem12
+module Problem12 =
 
-  type BinarySearchTree<'T> =
-  | Empty
-  | Node of value: 'T * left: BinarySearchTree<'T> * right: BinarySearchTree<'T>
-  static member remove (value: 'T) (tree: BinarySearchTree<'T>)  =
-    let rec predecessor tr =
-      match tr with
+  type BTree<'a> =
+    | Empty
+    | Node of value: 'a * left: BTree<'a> * right: BTree<'a>
+    static member remove value tree =
+      let rec rimraf v = function
       | Empty -> Empty
-      | Node (_, _, Empty) -> tree
-      | Node (_, _, right) -> predecessor right
-
-    let rec rimraf value tr =
-      match tr with
-      | Empty -> Empty
-      | Node(value', left, right) when value < value' ->
-      | Node(value', left, right) when value > value' ->
+      | Node(v', left, right) when v < v' ->
+        let left' = rimraf v left
+        Node(v', left', right)
+      | Node(v', left, right) when v > v' ->
+        let right' = rimraf v right
+        Node(v', left, right')
       | Node(_, Empty, Empty) -> Empty
       | Node(_, left, Empty) -> left
       | Node(_, Empty, right) -> right
       | Node(_, left, right) ->
-        let Node(value', _, _) = predecessor left
-        let left' = rimraf value' left
-        Node(value', left' right)
+        let (Node(v', _, _)) = BTree.predecessor left
+        let left' = rimraf v' left
+        Node(v', left', right)
+
+      rimraf value tree
+    static member private predecessor tree =
+      match tree with
+      | Empty -> Empty
+      | Node (_, _, Empty) -> tree
+      | Node (_, _, right) -> BTree.predecessor right
+
 
   let test () =
+    printfn "-- Problem 12 --"
 
-    let tree = Node(10,
-      Node(5,
-        Node(2, Empty, Empty),
-        Node(7, Empty, Empty)
-      ),
-      Node(20,
-        Node(15, Empty, Empty),
-        Node(30,
-          Node(17, Empty, Empty),
-          Node(25, Empty, Empty)
+    let tree =
+      Node(10,
+        Node(5,
+          Node(2, Empty, Empty),
+          Node(7, Empty, Empty)
+        ),
+        Node(20,
+          Node(15, Empty, Empty),
+          Node(30,
+            Node(17, Empty, Empty),
+            Node(25, Empty, Empty)
+          )
         )
       )
-    )
 
-    BinarySeachTree.delete 30 tree
+    printfn "Removing element 30 from tree %A" tree
+    printfn "%A" <| BTree.remove 30 tree
 
 (*
 module Problem13
