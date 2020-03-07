@@ -154,7 +154,7 @@ module Problem24 =
   *)
   let rec transpose = function
   | [] | []::_ -> []
-  | (x::xs')::ys as M -> List.map List.head M :: transpose(List.map List.tail M)
+  | (_::_)::_ as M -> List.map List.head M :: transpose(List.map List.tail M)
 
   let test () =
     printfn "-- Problem 24 --"

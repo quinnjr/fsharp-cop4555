@@ -23,16 +23,16 @@ let main _ =
   printfn "/-- Problem Set 2 --\\\n"
 
   ProblemSet2.Problem01.test ()
-  // ProblemSet2.Problem02.test ()
+  ProblemSet2.Problem02.test ()
   // ProblemSet2.Problem03.test ()
   // ProblemSet2.Problem04.test ()
   ProblemSet2.Problem05.test ()
-  // ProblemSet2.Problem06.test ()
-  // ProblemSet2.Problem07.test ()
+  ProblemSet2.Problem06.test ()
+  ProblemSet2.Problem08.test ()
   ProblemSet2.Problem09.test ()
   ProblemSet2.Problem11.test ()
   ProblemSet2.Problem12.test ()
-  // ProblemSet2.Problem13.test ()
+  ProblemSet2.Problem13.test ()
   // ProblemSet2.Problem14.test ()
 
   0
