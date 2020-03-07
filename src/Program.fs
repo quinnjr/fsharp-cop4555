@@ -30,5 +30,9 @@ let main _ =
   // ProblemSet2.Problem06.test ()
   // ProblemSet2.Problem07.test ()
   ProblemSet2.Problem09.test ()
+  ProblemSet2.Problem11.test ()
+  ProblemSet2.Problem12.test ()
+  // ProblemSet2.Problem13.test ()
+  // ProblemSet2.Problem14.test ()
 
   0

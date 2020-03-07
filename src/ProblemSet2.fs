@@ -191,6 +191,7 @@ module Problem09 =
   let printSome xs x = printfn "The last element of %A is %s." xs x
 
   let test () =
+    printfn "-- Problem 09 --"
     let list1 = []
     let list2 = ["cat"]
     let list3 = [1..5]
@@ -235,6 +236,7 @@ module Problem11 =
     Credits: Credits;
     GPA: GPA;
   }
+
   let test () =
     let student: Student = {
       Name = {
@@ -253,13 +255,14 @@ module Problem11 =
       };
     }
 
+    printfn "-- Problem 11 --"
     printfn "The record instant requested is %A" student
 
 module Problem12 =
 
-  type BinarySearchTree<'a> =
+  type BTree<'a> =
     | Empty
-    | Node of value: 'a * left: BinarySearchTree<'a> * right: BinarySearchTree<'a>
+    | Node of value: 'a * left: BTree<'a> * right: BTree<'a>
     static member remove value tree =
       let rec rimraf v = function
       | Empty -> Empty
@@ -273,7 +276,7 @@ module Problem12 =
       | Node(_, left, Empty) -> left
       | Node(_, Empty, right) -> right
       | Node(_, left, right) ->
-        let (Node(v', _, _)) = BinarySearchTree.predecessor left
+        let (Node(v', _, _)) = BTree.predecessor left
         let left' = rimraf v' left
         Node(v', left', right)
 
@@ -282,10 +285,11 @@ module Problem12 =
       match tree with
       | Empty -> Empty
       | Node (_, _, Empty) -> tree
-      | Node (_, _, right) -> BinarySearchTree.predecessor right
+      | Node (_, _, right) -> BTree.predecessor right
 
 
   let test () =
+    printfn "-- Problem 12 --"
 
     let tree =
       Node(10,
@@ -302,7 +306,8 @@ module Problem12 =
         )
       )
 
-    BinarySearchTree.remove 30 tree
+    printfn "Removing element 30 from tree %A" tree
+    printfn "%A" <| BTree.remove 30 tree
 
 (*
 module Problem13
