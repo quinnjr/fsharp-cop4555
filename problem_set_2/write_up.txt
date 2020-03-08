@@ -1,0 +1,39 @@
+Joseph R. Quinn
+#6103509
+COP4555-U02
+Github U/N: quinnjr
+Github Repo: https://github.com/2001-cop4555-u02/effort-1-quinnjr
+
+# Essay Questions
+
+7. For the function `oddeven`, the function call by itself is of O(1) difficulty. Breaking the function down using a recursive method makes the actual implementation of the function of O(ln n) complexity. Looking further at the implementation of the matched values, the then block appends the value of the if-then statement to the recursive call of while the else block prepends the recursive call to the current value. Appending in F# takes O(n) (since it must use a loop to correctly append the data to the List in memory) time at least, while the prepend only takes O(ln n) from the recursive function.
+
+  Therefore, the asymptotic time complexity of `oddeven` is O(n).
+
+14.
+  a. In memory, the value of variable i is equal to 5. In memory, the value of j is equal to 8. i is then modified to be the value of 2 multiplied by the value of j in memory, plus the value of i prior to the reassignment in memory (5). The result is that i in memory is now equal to 21. The value of j in memory stays at 8.
+  b. In memory, the value of i is 3. In memory, the value of j is 8. If the value of 2 multiplied by the value of i is greater than j then i in memory is assigned the value of 2 multiplied by j. If the value of 2 multiplied by the in-memory value of i is less than the value f j, then j in memory is set to 2 multiplied by i. The result of running this if-then-else expression is that i in memory remains at the value of 3 while the value of j in memory is altered to be 6 (2 * 3).
+
+# Github Summary
+
+0. Prior to beginning work on the current problem set, commits starting at 49b15ed on February 17th through commit 383d8eb addressed problems that were incomplete from the previous assignment. Problems 21, 22, 23, and 24 are mostly solved during this timeframe (with additional work being done on number 24 at a later date for modular use in Problem set 2).
+
+1. Problem 1 is solved between commits 82ff9a1 and e50d7c2. Problem #1 asked for a curry and uncurry function to be made for uncurrying and currying F# functions regardless of their initial implementation and in a polymorphic way.
+
+  My implementation of curry has the function signiture of `val curry : f:('a * 'b -> 'c) -> a:'a -> b:'b -> 'c` while my implementation of uncurry has the function signiture of `val uncurry : f:('a -> 'b -> 'c) -> a:'a * b:'b -> 'c`
+
+2. Problem 2 asked for the creation of a discriminated union for Coordinates that can be a Tuple, Threeple or Fourple. The work on Problem 2 begins at commit ab98089 and ends arund commit 70c2ca3. Work on Problem 2 was not completed as I had difficulties getting my solution to compile for the 'string' case of Fourple, even with gratuitous typing and duck-typing.
+
+5. Problem 5 was mostly worked on prior to moving to the single file of during commit 17ff4f4. Problem 5 asked for function which could take two vectors and return their inner product. As presented, my implementation met the additional criterion of the problem and reached stack overflow with the non-tail recursive version on significantly smaller vectors than the tail recursive form.
+
+6. Problem 6 was worked on intermitently from commit 79f7531 to 9650aae. Problem 6 asked for a function which could find the product of two matrices. I unfortunately was not able to get the function to print the correct list, but it is able to perform some of the matrices product. I believe the problem lies with a personal simplistic unerstanding of matrices and plan on seeking help during office hours to correct the function.
+
+8. Problem 8 asked for the imlementation of two list flatten functions with a comparison of the two implementations. My implementation was made from commit 3b1a2ef to 9650aae. The final result from my implementation was that flatten1 took 00:00:00.0008617 seconds and flatten2 took 00:00:00.0006934 seconds, a difference of 00:00:00.0001683 seconds, meaning flatten1 worked more efficiently on the input list.
+
+9. Work on question 9 occured intermitently from commit 0e2dc74 until the final commit of b54660b. Problem 9 asked for the creation of an exmaple program that could print the last value of an input List using the `option` type sprintf. The final implementation works correctly and appropriately implements the function polymorphicly.
+
+11. Work on problem 11 began at commmit 7d11e8a and ended mostly at commit cfcafc3. Problem 11 asked for the creation of a Record type for a student's Name, Credits completed, and GPA. My implemenation works correctly when printed and looks like an appropriate representation of what could be a database entry.
+
+12. Problem 12 asked for the creation of a Binary Search Tree, which was committed from e50d7c2 to e428634. Problem 12 asked for the implementation of the tree to also include a static member function `remove` that would work in a similar manner as other static member functions we've used from the List type. My implementation works correctly, but is hard to read on the commandline.
+
+3, 4, 10 & 13. By the time I had reached these problems all surrounding the concept of the interpreter and parsing a syntax tree, I was already at a point that I was about to pull my hair out if I continued work on those problems. Problem 3 is mostly worked on around commit 73da9d5, but I was not able to complete the problem in time to work further on 4, 10, and the variants of it asked for in problem 13. I plan on spending a significant amount of time working on these problems before the quiz and during office hours, as I can manage, to make sure I understand the concepts before moving on to the implemntation of our own functional programming language.
