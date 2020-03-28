@@ -26,7 +26,7 @@ let main _ =
   // ProblemSet2.Problem02.test ()
   // ProblemSet2.Problem03.test ()
   // ProblemSet2.Problem04.test ()
-  ProblemSet2.Problem05.test ()
+  // ProblemSet2.Problem05.test () // Commented out for performance
   ProblemSet2.Problem06.test ()
   ProblemSet2.Problem08.test ()
   ProblemSet2.Problem09.test ()
@@ -34,5 +34,10 @@ let main _ =
   ProblemSet2.Problem12.test ()
   // ProblemSet2.Problem13.test ()
   // ProblemSet2.Problem14.test ()
+
+  printfn "\--               --/\n\n"
+  printfn "/-- Problem Set 3 --\\\n"
+
+  ProblemSet3.Problem01.test ()
 
   0

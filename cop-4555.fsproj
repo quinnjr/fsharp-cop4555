@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Include="src/ProblemSet1.fs" />
     <Compile Include="src/ProblemSet2.fs" />
+    <Compile Include="src/ProblemSet3.fs" />
     <Compile Include="src/Program.fs" />
   </ItemGroup>
 
