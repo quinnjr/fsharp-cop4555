@@ -34,3 +34,17 @@ module Problem01 =
     let test_list = [0..20];
 
     printfn "%A" (LinkedList.fromList test_list)
+
+module Problem05 =
+
+  let rec interleave xs, ys =
+    let rec inner acc = function
+    | [], li | li, [] -> acc :: List.rev li
+    | x::xs, y::ys -> inner(b :: a :: acc) (xs, ys)
+    inner [] a, b |> List.rev
+
+  let test () =
+    let list1 = [0..5]
+    let list2 = [10..15]
+
+    printfn "%A" (interleave list1, list2)
