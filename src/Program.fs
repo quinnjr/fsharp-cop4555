@@ -38,6 +38,7 @@ let main _ =
 
   ProblemSet3.Problem01.test ()
   ProblemSet3.Problem05.test ()
+  ProblemSet3.Problem06.test ()
 
   printfn "\--               --/\n\n"
 

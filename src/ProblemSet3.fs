@@ -50,3 +50,17 @@ module Problem05 =
     let list2 = [10..15]
 
     printfn "%A" (interleave (list1, list2))
+
+module Problem06 =
+
+  let alternating1 = Seq.initInfinite (fun f -> (-1.0**(float)f)/(2.0**(float)f))
+
+  type 'a alternatingStream = Nil | Cons of 'a * (unit -> 'a stream)
+
+  let rec alternating f =
+    Cons((-1.0**(float)f)/(2**(float)f), alternating (f + 1))
+
+  let test () =
+
+    alternating1 |> Seq.skip 5 |> Seq.take 10 |> printfn "%A"
+    // printfn "%A" (alternating 10)
