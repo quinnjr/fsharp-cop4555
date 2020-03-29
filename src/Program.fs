@@ -4,8 +4,6 @@
 
 ///
 
-open ProblemSet1
-
 [<EntryPoint>]
 let main _ =
   printfn "/-- Problem Set 1 --\\\n"
@@ -39,5 +37,8 @@ let main _ =
   printfn "/-- Problem Set 3 --\\\n"
 
   ProblemSet3.Problem01.test ()
+  ProblemSet3.Problem05.test ()
+
+  printfn "\--               --/\n\n"
 
   0

@@ -37,14 +37,16 @@ module Problem01 =
 
 module Problem05 =
 
-  let rec interleave xs, ys =
+  let rec interleave (xs, ys) =
     let rec inner acc = function
-    | [], li | li, [] -> acc :: List.rev li
-    | x::xs, y::ys -> inner(b :: a :: acc) (xs, ys)
-    inner [] a, b |> List.rev
+    | [], [] -> acc
+    | [], _ | _, [] -> failwith "List are not of the same length"
+    | x::xs, y::ys -> inner (y::x::acc) (xs, ys)
+
+    inner [] (xs, ys) |> List.rev
 
   let test () =
     let list1 = [0..5]
     let list2 = [10..15]
 
-    printfn "%A" (interleave list1, list2)
+    printfn "%A" (interleave (list1, list2))
