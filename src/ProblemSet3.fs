@@ -39,6 +39,7 @@ module Problem01 =
       List.foldBack fCons list Empty
 
   let test () =
+    printfn "-- Problem 01 --"
     LinkedList.fromList [0..20] |> printfn "%A"
 
 module Problem05 =
@@ -52,10 +53,8 @@ module Problem05 =
     inner [] (xs, ys) |> List.rev
 
   let test () =
-    let list1 = [0..5]
-    let list2 = [10..15]
-
-    printfn "%A" (interleave (list1, list2))
+    printfn "-- Problem 05 --"
+    printfn "%A" (interleave ([0..1000], [1..2000]))
 
 module Problem06 =
 
@@ -67,7 +66,7 @@ module Problem06 =
     Cons((-1.0**(float)f)/(2**(float)f), alternating (f + 1)) *)
 
   let test () =
-
+    printfn "-- Problem 06 --"
     alternating1 |> Seq.skip 4 |> Seq.take 10 |> printfn "%A"
     // alternating 10 |> printfn "%A"
 
@@ -87,6 +86,7 @@ module Problem11 =
     |> Seq.fold (fun (x, y) items -> (x+y, x)) (0I, 1I)
 
   let test () =
+    printfn "-- Problem 11 --"
     let timer = new Stopwatch()
     timer.Start()
     for i in 0I..200I do
@@ -129,6 +129,7 @@ module Problem12 =
       final_grade/(float) len
 
   let test () =
+    printfn "-- Problem 12 --"
     let student: Student = { credit_hours = 0; grade_points = [] }
 
     student.AddCreditHours 4
