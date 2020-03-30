@@ -64,3 +64,30 @@ module Problem06 =
 
     alternating1 |> Seq.skip 5 |> Seq.take 10 |> printfn "%A"
     // printfn "%A" (alternating 10)
+
+module Problem11 =
+
+  let fib_rec n =
+    let rec inner (x, y) = function
+    | i when i < n -> inner (x+1, y+1) (i+1I)
+    | _ -> x
+    inner (0I, 1I) 0I
+
+  let rec fib_imp n
+    let inner x y i = if i < n then
+                        yield fib_imp n (x+1) (y+1) (i+1I)
+                      else
+                        yield x
+    inner 0I 1I 0I
+
+  let test () =
+
+  #time
+  for i in 0I..200I do
+    printfn "fib_imp of %A => %A" i (fib_imp i)
+  #time
+
+  #time
+  for i in 0I..200I do
+    printfn "fib_rec of %A => %A" i (fib_rec i)
+  #time
