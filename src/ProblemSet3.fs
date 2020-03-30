@@ -54,21 +54,24 @@ module Problem05 =
 
   let test () =
     printfn "-- Problem 05 --"
-    printfn "%A" (interleave ([0..1000], [1..2000]))
+    printfn "%A" (interleave ([1..2..19999], [2..2..20000]))
 
 module Problem06 =
 
   let alternating1 = Seq.initInfinite (fun f -> (-1.0**(float)f)/(2.0**(float)f))
 
-(*  type 'a alternatingStream = Nil | Cons of 'a * (unit -> 'b)
+  type 'a stream = Cons of 'a * (unit -> 'a stream)
 
   let rec alternating f =
-    Cons((-1.0**(float)f)/(2**(float)f), alternating (f + 1)) *)
+    Cons((-1.0**f)/(2.0**f), fun () -> alternating (f + 1.0))
+
+  let rec take n (Cons(x, xf)) =
+    if n = 0 then [] else x :: take (n-1) (xf())
 
   let test () =
     printfn "-- Problem 06 --"
-    alternating1 |> Seq.skip 4 |> Seq.take 10 |> printfn "%A"
-    // alternating 10 |> printfn "%A"
+    alternating1 |> Seq.skip 5 |> Seq.take 10 |> printfn "%A"
+    alternating 5.0 |> take 10 |> printfn "%A"
 
 (*
  Write a non-recursive fibonacci function using imperative F#. Compare the
