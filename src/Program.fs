@@ -6,7 +6,7 @@
 
 [<EntryPoint>]
 let main _ =
-  printfn "/-- Problem Set 1 --\\\n"
+  (* printfn "/-- Problem Set 1 --\\\n"
 
   ProblemSet1.Problem17.test ()
   ProblemSet1.Problem18.test ()
@@ -21,10 +21,10 @@ let main _ =
   printfn "/-- Problem Set 2 --\\\n"
 
   ProblemSet2.Problem01.test ()
-  // ProblemSet2.Problem02.test ()
-  // ProblemSet2.Problem03.test ()
-  // ProblemSet2.Problem04.test ()
-  // ProblemSet2.Problem05.test () // Commented out for performance
+  ProblemSet2.Problem02.test ()
+  ProblemSet2.Problem03.test ()
+  ProblemSet2.Problem04.test ()
+  ProblemSet2.Problem05.test ()
   ProblemSet2.Problem06.test ()
   ProblemSet2.Problem08.test ()
   ProblemSet2.Problem09.test ()
@@ -33,13 +33,14 @@ let main _ =
   // ProblemSet2.Problem13.test ()
   // ProblemSet2.Problem14.test ()
 
-  printfn "\--               --/\n\n"
+  printfn "\--               --/\n\n" *)
   printfn "/-- Problem Set 3 --\\\n"
 
   ProblemSet3.Problem01.test ()
   ProblemSet3.Problem05.test ()
   ProblemSet3.Problem06.test ()
   ProblemSet3.Problem11.test ()
+  ProblemSet3.Problem12.test ()
 
   printfn "\--               --/\n\n"
 

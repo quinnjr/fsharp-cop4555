@@ -174,6 +174,7 @@ module Problem06 =
   | [], [] -> acc
   | x::xs', y::ys' ->
     inner ([List.reduce reducer x; List.reduce reducer y]::acc) (xs', ys')
+  | _ -> failwith "yar har fidlee dee"
 
   let multiply xs ys = inner [] (xs, (Problem24.transpose ys))
 
@@ -324,13 +325,15 @@ module Problem12 =
         let (Node(v', _, _)) = BTree.predecessor left
         let left' = rimraf v' left
         Node(v', left', right)
+      | _ -> failwith "Here be a dragon"
 
       rimraf value tree
     static member private predecessor tree =
       match tree with
       | Empty -> Empty
-      | Node (_, _, Empty) -> tree
+      | Node (_, _, Empty) as tree -> tree
       | Node (_, _, right) -> BTree.predecessor right
+      | _ -> failwith "Here be dragons"
 
 
   let test () =

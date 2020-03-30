@@ -1,11 +1,15 @@
-(*
-
-*)
-
 module ProblemSet3
 
 open System.Diagnostics
 
+(*
+  Build a simple tree.
+    a. Create a discriminated union that can represent a linked list of integers.
+    b. Write a non-tail recursive function that converts a list into a linked
+       list of nodes.
+    c. Write a tail-recursive function that converts a list into a linked list
+       of nodes.
+*)
 module Problem01 =
 
   type LinkedList<'a> =
@@ -34,11 +38,8 @@ module Problem01 =
       let fCons value next = Cons (value, next)
       List.foldBack fCons list Empty
 
-
   let test () =
-    let test_list = [0..20];
-
-    printfn "%A" (LinkedList.fromList test_list)
+    LinkedList.fromList [0..20] |> printfn "%A"
 
 module Problem05 =
 
@@ -60,15 +61,15 @@ module Problem06 =
 
   let alternating1 = Seq.initInfinite (fun f -> (-1.0**(float)f)/(2.0**(float)f))
 
-(*  type 'a alternatingStream = Nil | Cons of 'a * (unit -> 'a stream)
+(*  type 'a alternatingStream = Nil | Cons of 'a * (unit -> 'b)
 
   let rec alternating f =
     Cons((-1.0**(float)f)/(2**(float)f), alternating (f + 1)) *)
 
   let test () =
 
-    alternating1 |> Seq.skip 5 |> Seq.take 10 |> printfn "%A"
-    // printfn "%A" (alternating 10)
+    alternating1 |> Seq.skip 4 |> Seq.take 10 |> printfn "%A"
+    // alternating 10 |> printfn "%A"
 
 (*
  Write a non-recursive fibonacci function using imperative F#. Compare the
@@ -89,7 +90,7 @@ module Problem11 =
     let timer = new Stopwatch()
     timer.Start()
     for i in 0I..200I do
-      printfn "fib_imp of %A => %A" i (fib_imp i)
+      fib_imp i |> ignore
     timer.Stop()
 
     printfn "Time of imperative = %A" timer.ElapsedMilliseconds
@@ -97,7 +98,7 @@ module Problem11 =
     let timer = new Stopwatch()
     timer.Start()
     for i in 0I..200I do
-      printfn "fib of of %A => %A" i (fib i)
+      fib i |> ignore
     timer.Stop()
 
     printfn "Time of recursive = %A" timer.ElapsedMilliseconds
@@ -109,24 +110,26 @@ module Problem11 =
   with appropriate functions and values. Use the instance to add grade points and
   credits several times, and display the GPA.
 *)
-
 module Problem12 =
 
-  type Student = {
-    credit_hours: int;
-    grade_points: list float
-  }
-  member this.AddGradePoints points =
-    this.grade_points = this.grade_points :: points
-  member this.AddCreditHours hours =
-    this.credit_hours = this.credit_hours + hours
-  member this.GPA () =
-    let len = List.length this.grade_points
-    let final_grade = List.reduce (fun acc elem -> acc + elem) this.grade_points6
-    final_grade / (float) len
+  type Student =
+    {
+      credit_hours: int;
+      grade_points: float list;
+    }
+    member this.AddGradePoints points =
+      this.grade_points = points :: this.grade_points
+      ()
+    member this.AddCreditHours hours =
+      this.credit_hours = this.credit_hours + hours
+      ()
+    member this.GPA () =
+      let len = List.length this.grade_points
+      let final_grade = List.reduce (fun acc elem -> acc + elem) this.grade_points
+      final_grade/(float) len
 
   let test () =
-    let student = Student { credit_hours: 0; grade_points: [] }
+    let student: Student = { credit_hours = 0; grade_points = [] }
 
     student.AddCreditHours 4
     student.AddGradePoints 3.01
@@ -140,4 +143,4 @@ module Problem12 =
     student.AddCreditHours 3
     student.AddGradePoints 2.76
 
-    printfn "Student's GPA: %A" student.GPA ()
+    student.GPA () |> printfn "Student's GPA: %A"
