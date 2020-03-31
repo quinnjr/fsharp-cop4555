@@ -54,7 +54,9 @@ module Problem05 =
 
   let test () =
     printfn "-- Problem 05 --"
+
     printfn "%A" (interleave ([1..2..19999], [2..2..20000]))
+    printfn "%A" (interleave ([1..2..199999], [2..2..200000]))
 
 module Problem06 =
 
@@ -117,15 +119,13 @@ module Problem12 =
 
   type Student =
     {
-      credit_hours: int;
-      grade_points: float list;
+      mutable credit_hours: int;
+      mutable grade_points: float list;
     }
     member this.AddGradePoints points =
-      this.grade_points = points :: this.grade_points
-      ()
+      this.grade_points <- points :: this.grade_points
     member this.AddCreditHours hours =
-      this.credit_hours = this.credit_hours + hours
-      ()
+      this.credit_hours <- this.credit_hours + hours
     member this.GPA () =
       let len = List.length this.grade_points
       let final_grade = List.reduce (fun acc elem -> acc + elem) this.grade_points
