@@ -1,0 +1,9 @@
+14. Using the example code provided in 'problem_14.c', the type derivation is
+    as follows:
+        int *x is a pointer to an address space that is the size of an int.
+        int a[15] is a sized array of 15 integers.
+
+        *x = 7 sets the value of what x points to (an integer) to 7.
+        a[*x] = *x + 4 sets the value of array a at index 7 to 7 plus 4 (11).
+
+    Using my example code, the assignments are confirmed to work correctly.
