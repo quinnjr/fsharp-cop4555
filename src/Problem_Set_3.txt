@@ -1,0 +1,23 @@
+4.
+    a. The memory value of i is 5. The memory value of j is 8. i's value is changed
+       to 2 + 5 * 8 (42). The final value of i is 42. The final value of j is 8.
+
+    b. The memory value of i is 3. The memory value of j is 8. If the value of
+       i times 3 is greater than the value j, then i is changed to 3 times j, otherwise
+       j is set to the value of 3 times i. The final memory value of i is 24 ( 3 times 8).
+       The final value of j is 8.
+
+    c. The memory value of i is 1. The memory value of j is 10. While the value
+       of 3 times the value of i is less than or equal to the value of j, set the
+       value of i to 3 times the current value of i. The final memory value of
+       i is 9. The final memory value of j is 10.       
+
+14. Using the example code provided in 'problem_14.c', the type derivation is
+    as follows:
+        int *x is a pointer to an address space that is the size of an int.
+        int a[15] is a sized array of 15 integers.
+
+        *x = 7 sets the value of what x points to (an integer) to 7.
+        a[*x] = *x + 4 sets the value of array a at index 7 to 7 plus 4 (11).
+
+    Using my example code, the assignments are confirmed to work correctly.

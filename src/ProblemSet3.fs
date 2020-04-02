@@ -151,36 +151,32 @@ module Problem12 =
 
 module Problem18 =
 
-  type Time =
-  | Seconds of float
-  | Microseconds of float
-  | Milliseconds of float
-  | Nanoseconds of float
-  let Seconds = 1
-  // let Milliseconds = 0.0001
-  let Microseconds = 0.0000001
-  let Nanoseconds = 0.0000000001
+  type Time () =
+    static member private Seconds = 1.0
+    static member private Milliseconds = 0.0001
+    static member private Microseconds = 0.0000001
+    static member private Nanoseconds = 0.0000000001
+    static member SecondsToMilliseconds (n: float) = n * Time.Milliseconds
+    static member SecondsToMicroseconds (n: float) = n * Time.Microseconds
+    static member SecondsToNanoseconds (n: float) = n * Time.Nanoseconds
+    static member MillisecondsToSeconds (n: float) = n / Time.Milliseconds
+    static member MicrosecondsToSeconds (n: float) = n / Time.Microseconds
+    static member NanosecondsToSeconds (n: float) = n / Time.Nanoseconds
 
-  module Time =
-    let Milliseconds = 0.0001
-    let SecondsToMilliseconds n = n * Time.Milliseconds
-    let SecondsToMicroseconds n = n / 1000000.0
-    let SecondsToNanoseconds n = n / 1000000000.0
-    let MillisecondsToSeconds n = n * 1000.0
-    let MicrosecondsToSeconds n = n * 1000000.0
-    let NanosecondsToSeconds n = n * 1000000000.0
 
   let test () =
     printfn "-- Problem 18 --"
-    Time.SecondsToMilliseconds 9.0 |> printfn "99 Seconds to Milliseconds: %A"
-    Time.SecondsToMicroseconds 9.0 |> printfn "99 Seconds to Microseconds: %A"
-    Time.SecondsToNanoseconds 9.0 |> printfn "99 Seconds to Nanoseconds: %A"
+    Time.SecondsToMilliseconds 9.0 |> printfn "9 Seconds to Milliseconds: %A"
+    Time.SecondsToMicroseconds 9.0 |> printfn "9 Seconds to Microseconds: %A"
+    Time.SecondsToNanoseconds 9.0 |> printfn "9 Seconds to Nanoseconds: %A"
 
-    Time.MillisecondsToSeconds 9.0 |> printfn "99 Milliseconds to Seconds: %A"
-    Time.MicrosecondsToSeconds 9.0 |> printfn "99 Microseconds to Seconds: %A"
-    Time.NanosecondsToSeconds 9.0 |> printfn "99 Nanoseconds to Seconds: %A"
+    Time.MillisecondsToSeconds 9.0 |> printfn "9 Milliseconds to Seconds: %A"
+    Time.MicrosecondsToSeconds 9.0 |> printfn "9 Microseconds to Seconds: %A"
+    Time.NanosecondsToSeconds 9.0 |> printfn "9 Nanoseconds to Seconds: %A"
 
-    Time.MillisecondsToSeconds 5000.0 |> Time.SecondsToMicroseconds |> printfn "5000 Milliseconds to Microseconds: %A"
+    Time.MillisecondsToSeconds 5000.0
+    |> Time.SecondsToMicroseconds
+    |> printfn "5000 Milliseconds to Microseconds: %A"
 
     Time.SecondsToMicroseconds 0.00000009
     |> Time.MicrosecondsToSeconds
