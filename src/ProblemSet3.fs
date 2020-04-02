@@ -164,6 +164,17 @@ module Problem18 =
   static member NanosecondsToSeconds n = n * Nanoseconds
 
   let test () =
-    Time.SecondsToMilliseconds 99 |> printfn "99 seconds to Milliseconds: %f"
-    Time.SecondsToMicroseconds 99 |> printfn "99 seconds to Microseconds: %f"
-    Time.SecondsToNanoseconds 99 |> printfn "99 seconds to Nanoseconds: %f"
+    Time.SecondsToMilliseconds 99 |> printfn "99 Seconds to Milliseconds: %f"
+    Time.SecondsToMicroseconds 99 |> printfn "99 Seconds to Microseconds: %f"
+    Time.SecondsToNanoseconds 99 |> printfn "99 Seconds to Nanoseconds: %f"
+
+    Time.MillisecondsToSeconds 99 |> printfn "99 Milliseconds to Seconds: %f"
+    Time.MicrosecondsToSeconds 99 |> printfn "99 Microseconds to Seconds: %f"
+    Time.NanosecondsToSeconds 99 |> printfn "99 Nanoseconds to Seconds: %f"
+
+    Time.MillisecondsToSeconds 5000 |> Time.SecondsToMicroseconds |> printfn "5000 Milliseconds to Microseconds"
+
+    Time.SecondsToMicroseconds 0.00000009
+    |> Time.MicrosecondsToSeconds
+    |> Time.SecondsToNanoseconds
+    |> printfn "0.00000009 seconds to nanoseconds: %f"
