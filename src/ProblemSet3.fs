@@ -148,3 +148,22 @@ module Problem12 =
     student.AddGradePoints 2.76
 
     student.GPA () |> printfn "Student's GPA: %A"
+
+module Problem18 =
+
+  type Time =
+  | Seconds = 1.0
+  | Microseconds = 0.0000001
+  | Milliseconds = 0.001
+  | Nanoseconds = 0.0000000001
+  static member SecondsToMilliseconds n = n / Milliseconds
+  static member SecondsToMicroseconds n = n / Microseconds
+  static member SecondsToNanoseconds n = n / Nanoseconds
+  static member MillisecondsToSeconds n = n * Milliseconds
+  static member MicrosecondsToSeconds n = n * Microseconds
+  static member NanosecondsToSeconds n = n * Nanoseconds
+
+  let test () =
+    Time.SecondsToMilliseconds 99 |> printfn "99 seconds to Milliseconds: %f"
+    Time.SecondsToMicroseconds 99 |> printfn "99 seconds to Microseconds: %f"
+    Time.SecondsToNanoseconds 99 |> printfn "99 seconds to Nanoseconds: %f"
