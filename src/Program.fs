@@ -4,6 +4,8 @@
 
 ///
 
+open ProblemSet3
+
 [<EntryPoint>]
 let main _ =
   (* printfn "/-- Problem Set 1 --\\\n"
