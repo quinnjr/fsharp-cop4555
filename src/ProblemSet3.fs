@@ -78,9 +78,13 @@ module Problem06 =
 module Problem07 =
 
   let is_divisible lst =
-    let seq Seq.initInfinite (fun f -> 1)
-    match lst with
-    | x::xs
+    let seq = Seq.initInfinite (fun f -> 1)
+
+    let rec inner seq = funtion
+    | [] -> seq
+    | x::xs -> inner (Seq.filter (fun n -> (n % x) = 0)) xs
+
+    inner seq lst
 
   let test () =
     printfn "-- Problem 07 --"
