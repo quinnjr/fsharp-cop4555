@@ -17,6 +17,18 @@
        value of i to 3 times the current value of i. The final memory value of
        i is 9. The final memory value of j is 10.
 
+9. A formula for the evaluation of k twices of successor 0 is:
+
+  sigma 2^k from k=1 to infinity.
+
+10. FSharp is left-associative, so first FSharp determines that a function that
+    takes f as a parameter is to be exepected. Next, Fsharp determines that the
+    first call to function f is a sub-call to f as well. Finally, FSharp determines
+    that the inner call to function f is of type float, meaning input
+    and output should be of type float since no other hints
+    are specified. Finally, FSharp takes typings to mean that the lambda
+    function is of type f:(float -> float) -> float. 
+
 14. Using the example code provided in 'problem_14.c', the type derivation is
     as follows:
         int *x is a pointer to an address space that is the size of an int.
