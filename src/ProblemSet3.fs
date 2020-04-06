@@ -75,6 +75,21 @@ module Problem06 =
     alternating1 |> Seq.skip 5 |> Seq.take 10 |> printfn "%A"
     alternating 5.0 |> take 10 |> printfn "%A"
 
+module Problem07 =
+
+  let is_divisible lst =
+    
+
+(*
+  Create a tail-recursive function that has a big integer as input and
+  calculates 2I raised to that power.
+*)
+module Problem08 =
+
+  let rec calc_power b = pown 2I b
+
+  let test () = printfn "foo bar"
+
 (*
  Write a non-recursive fibonacci function using imperative F#. Compare the
  timing with a tail-recursive fibonacci.
