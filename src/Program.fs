@@ -41,6 +41,7 @@ let main _ =
   ProblemSet3.Problem01.test ()
   ProblemSet3.Problem05.test ()
   ProblemSet3.Problem06.test ()
+  ProblemSet3.Problem07.test ()
   ProblemSet3.Problem11.test ()
   ProblemSet3.Problem12.test ()
   ProblemSet3.Problem18.test ()

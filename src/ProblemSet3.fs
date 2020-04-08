@@ -78,19 +78,16 @@ module Problem06 =
 module Problem07 =
 
   let is_divisible lst =
-    let seq = Seq.initInfinite (fun f -> 1)
-
-    let rec inner seq = funtion
+    let rec inner seq = function
     | [] -> seq
     | x::xs -> inner (Seq.filter (fun n -> (n % x) = 0)) xs
 
-    inner seq lst
+    inner Seq.initInfinite (fun f -> 1) lst
 
   let test () =
     printfn "-- Problem 07 --"
 
     printfn is_divisible [2;3;21;10]
-
 
 (*
   Create a tail-recursive function that has a big integer as input and
