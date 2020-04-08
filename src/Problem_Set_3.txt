@@ -27,7 +27,7 @@
     that the inner call to function f is of type float, meaning input
     and output should be of type float since no other hints
     are specified. Finally, FSharp takes typings to mean that the lambda
-    function is of type f:(float -> float) -> float. 
+    function is of type f:(float -> float) -> float.
 
 14. Using the example code provided in 'problem_14.c', the type derivation is
     as follows:
@@ -38,3 +38,24 @@
         a[*x] = *x + 4 sets the value of array a at index 7 to 7 plus 4 (11).
 
     Using my example code, the assignments are confirmed to work correctly.
+
+============================= HW 3 Elaboration ================================
+
+2.
+  a. First, Fsharp determines that fun f must be of type 'a. Next, FSharp looks
+     at the match statement to determine what the resultant of the expression
+     will be. FSharp finds that the return type of all arms of the match statement
+     is an integer and determines that the type is int -> int.
+  b. Fsharp first determines that x must be of type 'a. Next, Fsharp looks at the function
+    declaration to determine that x must be of type 'a list to use the append operator.
+    Finally, Fsharp determines that the return type is also of type 'a list, thus
+    making the type of the function x: 'a list -> ('a list -> 'a list).
+  c. First, FSharp determines that fun x must be of type 'a. Next, FSharp determines that 'a must
+     be an int to satisfy the appending of 5 to x. Finally, FSharp determines that the function
+     takes an input parameter of type int and returns an int list.
+  d. f: (string -> string) -> int
+  e. First, FSharp looks at the function declaration and determines that x must be of
+     type 'a and y must be of type 'b. Next, FSharp looks at the function internals to
+     determine that the returned value must be of type string as a concatenation of x and y
+     is occurring with a string of a space value. Finally, FSharp determines that both
+     x and y must be type string.
