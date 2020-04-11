@@ -77,17 +77,19 @@ module Problem06 =
 
 module Problem07 =
 
-  let is_divisible lst =
-    let rec inner seq = function
-    | [] -> seq
-    | x::xs -> inner (Seq.filter (fun n -> (n % x) = 0)) xs
+  let is_divisible xs =
+    let rec inner sx = function
+    | [] -> sx
+    | x::xs -> inner (Seq.filter (fun n -> (n % x) = 0) sx) xs
 
-    inner Seq.initInfinite (fun f -> 1) lst
+    let seq = Seq.initInfinite (fun idx -> idx + 1)
+
+    inner seq xs
 
   let test () =
     printfn "-- Problem 07 --"
 
-    printfn is_divisible [2;3;21;10]
+    is_divisible [2;3;21;10] |> printfn "%A"
 
 (*
   Create a tail-recursive function that has a big integer as input and
@@ -95,9 +97,15 @@ module Problem07 =
 *)
 module Problem08 =
 
-  let rec calc_power b = pown 2I b
+  let calc_power count =
+    let rec inner acc = function
+    | 1 -> acc * 2I
+    | n -> inner (acc * 2I) (n-1)
+    inner 1I count
 
-  let test () = printfn "foo bar"
+  let test () =
+    printfn "-- Problem 08 --"
+    calc_power 5 |> printfn "%A"
 
 (*
  Write a non-recursive fibonacci function using imperative F#. Compare the
@@ -172,6 +180,15 @@ module Problem12 =
     student.AddGradePoints 2.76
 
     student.GPA () |> printfn "Student's GPA: %A"
+
+module Problem15 =
+
+  let makeMonitoredFun f =
+    let c = ref 0
+    (fun x -> c := !c+1; printf "Called %d times.\n" !c; f x)
+
+  let test () =
+    (fun x -> (makeMonitoredFun List.rev) x)
 
 module Problem18 =
 
