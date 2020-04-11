@@ -190,6 +190,13 @@ module Problem15 =
   let test () =
     (fun x -> (makeMonitoredFun List.rev) x)
 
+module Problem16 =
+
+  let interp token =
+
+  let test () =
+    printfn "-- Problem 16 --"
+
 module Problem18 =
 
   type Time () =
