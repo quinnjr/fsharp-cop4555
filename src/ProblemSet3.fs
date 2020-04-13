@@ -48,7 +48,12 @@ module Problem01 =
     printfn "-- Problem 01 --"
     LinkedList.fromList [0..20] |> printfn "%A"
     LinkedList.fromListNonTail [0..20] |> printfn "%A"
-
+(*
+  Write a tail-recursive F# function interleave(xs,ys) that interleaves two
+  lists. Assume that the two lists have the same length.
+  Compare the timing of the recursive function from Problem Set 1 with this
+  tail-recursive version. Time these examples in both versions.
+*)
 module Problem05 =
 
   let rec interleave (xs, ys) =
@@ -65,6 +70,12 @@ module Problem05 =
     printfn "%A" (interleave ([1..2..19999], [2..2..20000]))
     printfn "%A" (interleave ([1..2..199999], [2..2..200000]))
 
+(*
+  Generate an infinite sequence for the alternating series of 1/(2**n).
+  Display the 5th through 15th numbers in the series. The numbers should
+  display as the floating point version of the fractions.
+  Repeat the exercise using an infinite stream.
+*)
 module Problem06 =
 
   let alternating1 = Seq.initInfinite (fun f -> (-1.0**(float)f)/(2.0**(float)f))
@@ -82,12 +93,24 @@ module Problem06 =
     alternating1 |> Seq.skip 5 |> Seq.take 10 |> printfn "%A"
     alternating 5.0 |> take 10 |> printfn "%A"
 
+(*
+  Generate an infinite stream for the the natural numbers greater than zero
+  that are divisible by each element in a list of at least one integer.
+  Use filters on the infinite stream of natural numbers starting at one.
+  Display the 20th through 30th numbers in the series.
+  Repeat the exercise using an infinite sequence. Sequences also have a filter
+  function, so it can be solved similarly to the infinite stream
+  version. Just for fun, try to solve it without using the filter function.
+  For both functions, be sure to dislay an appropriate error message if
+  the list does not have any elements.
+*)
 module Problem07 =
 
   let is_divisible xs =
     let rec inner sx = function
     | [] -> sx
     | x::xs -> inner (Seq.filter (fun n -> (n % x) = 0) sx) xs
+    | _ -> failwith "Improper number of list elements"
 
     let seq = Seq.initInfinite (fun idx -> idx + 1)
 
@@ -188,6 +211,28 @@ module Problem12 =
 
     student.GPA () |> printfn "Student's GPA: %A"
 
+(*
+  An interesting use of first-class functions and ref cells in F# is to create
+  a monitored version of a function:
+    > let makeMonitoredFun f =
+      let c = ref 0
+      (fun x -> c := !c+1; printf "Called %d times.\n" !c; f x);;
+      val makeMonitoredFun : ('a -> 'b) -> ('a -> 'b)
+
+    > let msqrt = makeMonitoredFun sqrt;;
+    val msqrt : (float -> float)
+
+    > msqrt 16.0 + msqrt 25.0;;
+    Called 1 times.
+    Called 2 times.
+    val it : float = 9.0
+
+First, explain why F# does not allow the following declaration:
+  let mrev = makeMonitoredFun List.rev
+Now suppose we rewrite the declaration using the technique of eta expansion:
+  let mrev = fun x -> (makeMonitoredFun List.rev) x
+Does this solve the problem? Explain why or why not.
+*)
 module Problem15 =
 
   let makeMonitoredFun f =
@@ -195,8 +240,18 @@ module Problem15 =
     (fun x -> c := !c+1; printf "Called %d times.\n" !c; f x)
 
   let test () =
-    (fun x -> (makeMonitoredFun List.rev) x)
+    let mrev = (fun x -> (makeMonitoredFun List.rev) x)
 
+    mrev [1..10] |> printfn "%A"
+
+(*
+  Refer to the notes on Canvas: lecture notes on the PCF language and implement
+  an interpreter that processes programs from the PCF language.
+  Use the parser.fsx or parser.fs code to parse the input into an abstract tree.
+  You are to write an F# function interp that takes an abstract syntax tree
+  represented as a term and returns the result of evaluating it, which will
+  also be a term.
+*)
 module Problem16 =
 
 //  let interp token =
@@ -204,6 +259,16 @@ module Problem16 =
   let test () =
     printfn "-- Problem 16 --"
 
+(*
+  Declare type measures for seconds, microseconds, millseconds, and nanoseconds.
+  Declare constants for the number of seconds in each of the other types.
+  Create functions that convert seconds to each of the other types. What is the
+  principal type of each function?
+  Create functions that convert each of the other types to seconds. What is the
+  principal type of each function?
+  Convert 5000 milliseconds to seconds and then to microseconds.
+  Convert 0.00000009 seconds to microseconds and to nanoseconds.
+*)
 module Problem18 =
 
   type Time () =
