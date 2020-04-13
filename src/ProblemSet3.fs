@@ -270,7 +270,20 @@ module Problem16 =
   Convert 0.00000009 seconds to microseconds and to nanoseconds.
 *)
 module Problem18 =
+  module Time =
+    [<Measure>] type Seconds
+    [<Measure>] type Milliseconds
+    [<Measure>] type Microseconds
+    [<Measure>] type Nanoseconds
 
+    let SecondsToMilliseconds n = n * 0.001<Seconds/Milliseconds>
+    let SecondsToMicroseconds n = n * 0.0000001<Seconds/Microseconds>
+    let SecondsToNanoseconds n = n * 0.0000000001<Seconds/Nanoseconds>
+    let MillisecondsToSeconds n = n * 1000.0<Milliseconds/Seconds>
+    let MicrosecondsToSeconds n = n * 1000000.0<Microseconds/Seconds>
+    let NanosecondsToSeconds n = n * 1000000000.0<Nanoseconds/Seconds>
+
+(*
   type Time () =
     static member private Seconds = 1.0
     static member private Milliseconds = 0.0001
@@ -282,7 +295,7 @@ module Problem18 =
     static member MillisecondsToSeconds (n: float) = n / Time.Milliseconds
     static member MicrosecondsToSeconds (n: float) = n / Time.Microseconds
     static member NanosecondsToSeconds (n: float) = n / Time.Nanoseconds
-
+*)
 
   let test () =
     printfn "-- Problem 18 --"
