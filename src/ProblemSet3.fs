@@ -38,9 +38,16 @@ module Problem01 =
       let fCons value next = Cons (value, next)
       List.foldBack fCons list Empty
 
+    let fromListNonTail list =
+      let rec inner = function
+      | [x] -> Cons (x, Empty)
+      | x::xs -> Cons (x, (inner xs))
+      inner list
+
   let test () =
     printfn "-- Problem 01 --"
     LinkedList.fromList [0..20] |> printfn "%A"
+    LinkedList.fromListNonTail [0..20] |> printfn "%A"
 
 module Problem05 =
 
@@ -192,7 +199,7 @@ module Problem15 =
 
 module Problem16 =
 
-  let interp token =
+//  let interp token =
 
   let test () =
     printfn "-- Problem 16 --"
