@@ -2,6 +2,8 @@ module ProblemSet3
 
 open System.Diagnostics
 
+open Parser.Parse
+
 (*
   Build a simple tree.
     a. Create a discriminated union that can represent a linked list of integers.
@@ -213,43 +215,6 @@ module Problem12 =
     student.GPA () |> printfn "Student's GPA: %A"
 
 (*
-  An interesting use of first-class functions and ref cells in F# is to create
-  a monitored version of a function:
-    > let makeMonitoredFun f =
-      let c = ref 0
-      (fun x -> c := !c+1; printf "Called %d times.\n" !c; f x);;
-      val makeMonitoredFun : ('a -> 'b) -> ('a -> 'b)
-
-    > let msqrt = makeMonitoredFun sqrt;;
-    val msqrt : (float -> float)
-
-    > msqrt 16.0 + msqrt 25.0;;
-    Called 1 times.
-    Called 2 times.
-    val it : float = 9.0
-
-First, explain why F# does not allow the following declaration:
-  let mrev = makeMonitoredFun List.rev
-Now suppose we rewrite the declaration using the technique of eta expansion:
-  let mrev = fun x -> (makeMonitoredFun List.rev) x
-Does this solve the problem? Explain why or why not.
-*)
-module Problem15 =
-
-  let makeMonitoredFun f =
-    let c = ref 0
-    (fun x -> c := !c+1; printf "Called %d times.\n" !c; f x)
-
-  let test () =
-    printfn "-- Problem 15 --"
-    let mrev1 = makeMonitoredFun List.rev
-    let mrev = (fun x -> (makeMonitoredFun List.rev) x)
-
-    mrev1 [1..10] |> printfn "%A"
-
-    mrev [1..10] |> printfn "%A"
-
-(*
   Refer to the notes on Canvas: lecture notes on the PCF language and implement
   an interpreter that processes programs from the PCF language.
   Use the parser.fsx or parser.fs code to parse the input into an abstract tree.
@@ -258,27 +223,41 @@ module Problem15 =
   also be a term.
 *)
 module Problem16 =
-  open Parser.Parse
 
-  let interp token =
-    match token with
-    | ID ->
-    | NUM -> failwith "Not Yet Implemented"
-    | BOOL -> failwith "Not Yet Implemented"
-    | SUCC -> failwith "Not Yet Implemented"
-    | PRED -> failwith "Not Yet Implemented"
-    | ISZERO -> failwith "Not Yet Implemented"
-    | IF -> failwith "Not Yet Implemented"
-    | APP -> failwith "Not Yet Implemented"
-    | FUN -> failwith "Not Yet Implemented"
-    | REC -> failwith "Not Yet Implemented"
-    | ERROR -> failwith "An error occurred"
+  let rec interp = function
+  | ERROR s -> ERROR (sprintf "An error occurred: %A" s)
+  | APP (e1, e2) ->
+    match (interp e1, interp e2) with
+    | (ERROR s, _) | (_, ERROR s) -> ERROR s
+    | (NUM n, _) | (_, NUM n) -> NUM n
+    | (BOOL b, _) | (_, BOOL b) -> if b then NUM 1 else NUM 0
+    | (SUCC, NUM n) -> if n >= 0 then NUM (n+1) else NUM 0
+    | (SUCC, v) -> ERROR (sprintf "'succ' needs int argument, not '%A'" v)
+    | (PRED, NUM n) -> if n > 0 then NUM (n - 1) else NUM 0
+    | (PRED, v) -> ERROR (sprintf "'pred' needs int argument, not '%A'" v)
+    | (ISZERO, NUM n) -> if n = 0 then NUM 1 else NUM 0
+    | (ISZERO, v) -> ERROR (sprintf "'iszero' needs int argument, not '%A'" v)
+    | (REC (e1,e2), _) -> ERROR "Not yet implemeneted"
+    | (ID e1, _) -> ERROR "Not yet implemented"
+    | (FUN (e1, e2), _) -> ERROR "Not yet implemented"
+  | NUM n -> NUM n
+  | BOOL b -> BOOL b
+  | SUCC -> SUCC
+  | PRED -> PRED
+  | IF (b, e1, e2) -> if b then e1 else e2
+  | _ -> failwith "Not implemented"
+
+  let interpfile filename = filename |> parsefile |> interp
+
+  let interpstr sourcecode = sourcecode |> parsestr |> interp
 
   let test () =
     printfn "-- Problem 16 --"
 
+    interpstr "succ 0" |> printfn "%A"
+
 (*
-  Declare type measures for seconds, microseconds, millseconds, and nanoseconds.
+  Declare type measures for seconds, microseconds, milliseconds, and nanoseconds.
   Declare constants for the number of seconds in each of the other types.
   Create functions that convert seconds to each of the other types. What is the
   principal type of each function?
