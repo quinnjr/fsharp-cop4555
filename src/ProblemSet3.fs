@@ -40,6 +40,7 @@ module Problem01 =
 
     let fromListNonTail list =
       let rec inner = function
+      | [] -> failwith "Here be dragons"
       | [x] -> Cons (x, Empty)
       | x::xs -> Cons (x, (inner xs))
       inner list
@@ -240,7 +241,11 @@ module Problem15 =
     (fun x -> c := !c+1; printf "Called %d times.\n" !c; f x)
 
   let test () =
+    printfn "-- Problem 15 --"
+    let mrev1 = makeMonitoredFun List.rev
     let mrev = (fun x -> (makeMonitoredFun List.rev) x)
+
+    mrev1 [1..10] |> printfn "%A"
 
     mrev [1..10] |> printfn "%A"
 
@@ -253,8 +258,21 @@ module Problem15 =
   also be a term.
 *)
 module Problem16 =
+  open Parser.Parse
 
-//  let interp token =
+  let interp token =
+    match token with
+    | ID ->
+    | NUM -> failwith "Not Yet Implemented"
+    | BOOL -> failwith "Not Yet Implemented"
+    | SUCC -> failwith "Not Yet Implemented"
+    | PRED -> failwith "Not Yet Implemented"
+    | ISZERO -> failwith "Not Yet Implemented"
+    | IF -> failwith "Not Yet Implemented"
+    | APP -> failwith "Not Yet Implemented"
+    | FUN -> failwith "Not Yet Implemented"
+    | REC -> failwith "Not Yet Implemented"
+    | ERROR -> failwith "An error occurred"
 
   let test () =
     printfn "-- Problem 16 --"
