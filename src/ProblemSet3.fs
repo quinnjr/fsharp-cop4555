@@ -151,6 +151,7 @@ module Problem11 =
       if i < n then inner (x+y, x) (i+1I) else x
     inner (0I, 1I) 0I
 
+  // rewrite with ref and pointers
   let fib_imp n =
     Seq.init (int n) id
     |> Seq.fold (fun (x, y) items -> (x+y, x)) (0I, 1I)
@@ -180,12 +181,13 @@ module Problem11 =
   with appropriate functions and values. Use the instance to add grade points and
   credits several times, and display the GPA.
 *)
+(*
 module Problem12 =
 
   type Student =
     {
-      mutable credit_hours: int;
-      mutable grade_points: float list;
+      credit_hours: int;
+      grade_points: float list;
     }
     member this.AddGradePoints points =
       this.grade_points <- points :: this.grade_points
@@ -213,7 +215,7 @@ module Problem12 =
     student.AddGradePoints 2.76
 
     student.GPA () |> printfn "Student's GPA: %A"
-
+*)
 (*
   Refer to the notes on Canvas: lecture notes on the PCF language and implement
   an interpreter that processes programs from the PCF language.
@@ -229,8 +231,8 @@ module Problem16 =
   | APP (e1, e2) ->
     match (interp e1, interp e2) with
     | (ERROR s, _) | (_, ERROR s) -> ERROR s
-    | (NUM n, _) | (_, NUM n) -> NUM n
-    | (BOOL b, _) | (_, BOOL b) -> if b then NUM 1 else NUM 0
+    | (NUM n, _) | (_, NUM n) -> if n > 0 then NUM n else NUM 0
+    | (BOOL b, _) | (_, BOOL b) -> if b then BOOL true else BOOL false
     | (SUCC, NUM n) -> if n >= 0 then NUM (n+1) else NUM 0
     | (SUCC, v) -> ERROR (sprintf "'succ' needs int argument, not '%A'" v)
     | (PRED, NUM n) -> if n > 0 then NUM (n - 1) else NUM 0
@@ -244,7 +246,10 @@ module Problem16 =
   | BOOL b -> BOOL b
   | SUCC -> SUCC
   | PRED -> PRED
-  | IF (b, e1, e2) -> if b then e1 else e2
+  | IF (b, e1, e2) ->
+    match interp b with
+    | BOOL b -> if b then interp(e1) else interp(e2)
+    | _ -> ERROR "if statement was not valid."
   | _ -> failwith "Not implemented"
 
   let interpfile filename = filename |> parsefile |> interp
@@ -273,42 +278,33 @@ module Problem18 =
     [<Measure>] type Microseconds
     [<Measure>] type Nanoseconds
 
-    let SecondsToMilliseconds n = n * 0.001<Seconds/Milliseconds>
-    let SecondsToMicroseconds n = n * 0.0000001<Seconds/Microseconds>
-    let SecondsToNanoseconds n = n * 0.0000000001<Seconds/Nanoseconds>
-    let MillisecondsToSeconds n = n * 1000.0<Milliseconds/Seconds>
-    let MicrosecondsToSeconds n = n * 1000000.0<Microseconds/Seconds>
-    let NanosecondsToSeconds n = n * 1000000000.0<Nanoseconds/Seconds>
+    let MillisecondsPerSecond = 1000.0<Milliseconds/Seconds>
+    let MicrosecondsPerSecond = 1000000.0<Microseconds/Seconds>
+    let NanosecondsPerSecond = 1000000000.0<Nanoseconds/Seconds>
 
-(*
-  type Time () =
-    static member private Seconds = 1.0
-    static member private Milliseconds = 0.0001
-    static member private Microseconds = 0.0000001
-    static member private Nanoseconds = 0.0000000001
-    static member SecondsToMilliseconds (n: float) = n * Time.Milliseconds
-    static member SecondsToMicroseconds (n: float) = n * Time.Microseconds
-    static member SecondsToNanoseconds (n: float) = n * Time.Nanoseconds
-    static member MillisecondsToSeconds (n: float) = n / Time.Milliseconds
-    static member MicrosecondsToSeconds (n: float) = n / Time.Microseconds
-    static member NanosecondsToSeconds (n: float) = n / Time.Nanoseconds
-*)
+    let SecondsToMilliseconds (n: float<Seconds>) = n * MillisecondsPerSecond
+    let SecondsToMicroseconds (n: float<Seconds>) = n * MicrosecondsPerSecond
+    let SecondsToNanoseconds (n: float<Seconds>) = n * NanosecondsPerSecond
+    let MillisecondsToSeconds (n: float<Milliseconds>) = n / MillisecondsPerSecond
+    let MicrosecondsToSeconds (n: float<Microseconds>) = n / MicrosecondsPerSecond
+    let NanosecondsToSeconds (n: float<Nanoseconds>) = n * NanosecondsPerSecond
 
+  open Time
   let test () =
     printfn "-- Problem 18 --"
-    Time.SecondsToMilliseconds 9.0 |> printfn "9 Seconds to Milliseconds: %A"
-    Time.SecondsToMicroseconds 9.0 |> printfn "9 Seconds to Microseconds: %A"
-    Time.SecondsToNanoseconds 9.0 |> printfn "9 Seconds to Nanoseconds: %A"
+    Time.SecondsToMilliseconds 9.0<Time.Seconds> |> printfn "9 Seconds to Milliseconds: %A"
+    Time.SecondsToMicroseconds 9.0<Time.Seconds> |> printfn "9 Seconds to Microseconds: %A"
+    Time.SecondsToNanoseconds 9.0<Time.Seconds> |> printfn "9 Seconds to Nanoseconds: %A"
 
-    Time.MillisecondsToSeconds 9.0 |> printfn "9 Milliseconds to Seconds: %A"
-    Time.MicrosecondsToSeconds 9.0 |> printfn "9 Microseconds to Seconds: %A"
-    Time.NanosecondsToSeconds 9.0 |> printfn "9 Nanoseconds to Seconds: %A"
+    Time.MillisecondsToSeconds 9.0<Time.Milliseconds> |> printfn "9 Milliseconds to Seconds: %A"
+    Time.MicrosecondsToSeconds 9.0<Microseconds> |> printfn "9 Microseconds to Seconds: %A"
+    Time.NanosecondsToSeconds 9.0<Nanoseconds> |> printfn "9 Nanoseconds to Seconds: %A"
 
-    Time.MillisecondsToSeconds 5000.0
+    Time.MillisecondsToSeconds 5000.0<Time.Milliseconds>
     |> Time.SecondsToMicroseconds
     |> printfn "5000 Milliseconds to Microseconds: %A"
 
-    Time.SecondsToMicroseconds 0.00000009
+    Time.SecondsToMicroseconds 0.00000009<Seconds>
     |> Time.MicrosecondsToSeconds
     |> Time.SecondsToNanoseconds
     |> printfn "0.00000009 seconds to nanoseconds: %A"
