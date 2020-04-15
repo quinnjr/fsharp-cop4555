@@ -1,6 +1,6 @@
 2.
-    a. The strings the CFG recognizes various lengths of binary (zeroes and ones).
-    b. "0110" could be interpreted as "0110" or "0100"
+    a. The strings the CFG recognizes a balanced set of zeroes and ones.
+    b. "0110"
     c.
 
 4.

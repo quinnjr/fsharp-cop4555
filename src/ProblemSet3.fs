@@ -51,6 +51,42 @@ module Problem01 =
     printfn "-- Problem 01 --"
     LinkedList.fromList [0..20] |> printfn "%A"
     LinkedList.fromListNonTail [0..20] |> printfn "%A"
+
+module Problem03 =
+
+  (*
+    P -> A (P) A
+    P -> B (P) B
+    P -> BAR
+  *)
+
+  type Tokens = A | B | BAR
+
+  type Tree =
+  | BR_A of tree
+  | BR_B of tree
+  | BR_Empty
+
+  let rec tokenizer = function
+  | "" -> []
+  | str ->
+    let t = match str.Chars 0 with
+            | 'a' | 'A' -> A
+            | 'b' | 'B' -> B
+            | '|' -> BAR
+            | v -> failwith (sprintf "Letters other than a, b, and the vertical bar are not supported. Received '%A'" v)
+    t :: tokenizer(str.Substring 1)
+
+  let rec parser = function
+  | [] -> failwith "No tokens provided"
+  | A::xs -> let (tree, tail) = P
+             let tail = tail |> eat A
+             BR_A(tree)
+  | B::xs -> let (tree, tail) = P
+             let tail = tail |> eat B
+             BR_B(tree)
+  | BAR::xs -> xs
+
 (*
   Write a tail-recursive F# function interleave(xs,ys) that interleaves two
   lists. Assume that the two lists have the same length.
@@ -109,6 +145,19 @@ module Problem06 =
 *)
 module Problem07 =
 
+  let nats = Cons(1, (fun n -> n+1))
+
+  let rec filter f = function
+  | [] -> failwith "No array given"
+  | x::xs -> if f(x) then x :: filter f xs else filter f xs
+
+  let is_divisible_stream lst =
+    let rec inner acc = function
+    | [] -> acc
+    | x::xs -> let mul = filter (fun z -> (z % x) = 0) stream
+               inner mul xs
+    inner nats lst
+
   let is_divisible xs =
     let rec inner sx = function
     | [] -> sx
@@ -122,6 +171,7 @@ module Problem07 =
   let test () =
     printfn "-- Problem 07 --"
 
+    is_divisible_stream [2;3;21;10] |> printfn "%A"
     is_divisible [2;3;21;10] |> printfn "%A"
 
 (*
@@ -181,26 +231,26 @@ module Problem11 =
   with appropriate functions and values. Use the instance to add grade points and
   credits several times, and display the GPA.
 *)
-(*
+
 module Problem12 =
 
   type Student =
     {
-      credit_hours: int;
-      grade_points: float list;
+      credit_hours: int ref;
+      grade_points: float list ref;
     }
     member this.AddGradePoints points =
-      this.grade_points <- points :: this.grade_points
+      this.grade_points := points :: !this.grade_points
     member this.AddCreditHours hours =
-      this.credit_hours <- this.credit_hours + hours
+      this.credit_hours := !this.credit_hours + hours
     member this.GPA () =
-      let len = List.length this.grade_points
-      let final_grade = List.reduce (fun acc elem -> acc + elem) this.grade_points
+      let len = List.length !this.grade_points
+      let final_grade = List.reduce (fun acc elem -> acc + elem) !this.grade_points
       final_grade/(float) len
 
   let test () =
     printfn "-- Problem 12 --"
-    let student: Student = { credit_hours = 0; grade_points = [] }
+    let student: Student = { credit_hours = ref 0; grade_points = ref [] }
 
     student.AddCreditHours 4
     student.AddGradePoints 3.01
@@ -214,8 +264,52 @@ module Problem12 =
     student.AddCreditHours 3
     student.AddGradePoints 2.76
 
+    printfn "Student is: %A" student
     student.GPA () |> printfn "Student's GPA: %A"
+
+(*
+  An interesting use of first-class functions and ref cells in F# is to create
+  a monitored version of a function:
+
+  > let makeMonitoredFun f =
+        let c = ref 0
+        (fun x -> c := !c+1; printf "Called %d times.\n" !c; f x);;
+
+    val makeMonitoredFun : ('a -> 'b) -> ('a -> 'b)
+
+  > let msqrt = makeMonitoredFun sqrt;;
+    val msqrt : (float -> float)
+
+  > msqrt 16.0 + msqrt 25.0;;
+    Called 1 times.
+    Called 2 times.
+    val it : float = 9.0
+
+
+  First, explain why F# does not allow the following declaration:
+
+    let mrev = makeMonitoredFun List.rev
+
+  Now suppose we rewrite the declaration using the technique of eta expansion:
+
+    let mrev = fun x -> (makeMonitoredFun List.rev) x
+
+  Does this solve the problem? Explain why or why not.
 *)
+module Problem15 =
+
+  let makeMonitoredFun f =
+    let c = ref 0
+    (fun x -> c := !c+1; printf "Called %d times.\n" !c; f x)
+
+  let mrev = makeMonitoredFun List.rev
+  let mrev2 = fun x -> (makeMonitoredFun List.rev) x
+
+  let test () =
+    printfn "-- Problem 15 --"
+    mrev [1..10] |> printfn "%A"
+    mrev2 [1..10] |> printfn "%A"
+
 (*
   Refer to the notes on Canvas: lecture notes on the PCF language and implement
   an interpreter that processes programs from the PCF language.
@@ -249,8 +343,11 @@ module Problem16 =
   | IF (b, e1, e2) ->
     match interp b with
     | BOOL b -> if b then interp(e1) else interp(e2)
-    | _ -> ERROR "if statement was not valid."
-  | _ -> failwith "Not implemented"
+    | NUM n -> if n = 1 then interp(e1)
+               else if n = 0 then interp(e2)
+               else ERROR (sprintf "'if' statement integer value must be 0 or 1, not '%A'" n)
+    | v -> ERROR (sprintf "'if' statement needs a boolean argument, not '%A'" v)
+  | ISZERO -> ISZERO
 
   let interpfile filename = filename |> parsefile |> interp
 
@@ -260,6 +357,18 @@ module Problem16 =
     printfn "-- Problem 16 --"
 
     interpstr "succ 0" |> printfn "%A"
+    interpstr "succ 1" |> printfn "%A"
+    interpstr "pred 0" |> printfn "%A"
+    interpstr "pred 10" |> printfn "%A"
+    interpstr "succ (succ (succ 0))" |> printfn "%A"
+    interpstr "iszero succ" |> printfn "%A"
+    interpstr "succ pred 7" |> printfn "%A"
+    interpstr "succ (pred 7)" |> printfn "%A"
+    interpfile "src/if.txt" |> printfn "%A"
+    interpfile "src/complex1.txt" |> printfn "%A"
+    interpfile "src/complex2.txt" |> printfn "%A"
+    interpfile "src/complex3.txt" |> printfn "%A"
+    interpfile "src/complex4.txt" |> printfn "%A"
 
 (*
   Declare type measures for seconds, microseconds, milliseconds, and nanoseconds.
