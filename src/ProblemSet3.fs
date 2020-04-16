@@ -52,19 +52,19 @@ module Problem01 =
     LinkedList.fromList [0..20] |> printfn "%A"
     LinkedList.fromListNonTail [0..20] |> printfn "%A"
 
+(*
 module Problem03 =
 
-  (*
     P -> A (P) A
     P -> B (P) B
     P -> BAR
-  *)
+
 
   type Tokens = A | B | BAR
 
   type Tree =
-  | BR_A of tree
-  | BR_B of tree
+  | BR_A of Tree
+  | BR_B of Tree
   | BR_Empty
 
   let rec tokenizer = function
@@ -86,6 +86,7 @@ module Problem03 =
              let tail = tail |> eat B
              BR_B(tree)
   | BAR::xs -> xs
+  *)
 
 (*
   Write a tail-recursive F# function interleave(xs,ys) that interleaves two
@@ -145,18 +146,27 @@ module Problem06 =
 *)
 module Problem07 =
 
-  let nats = Cons(1, (fun n -> n+1))
+  type 'a stream = Nil | Cons of 'a * (unit -> 'a stream)
+  let rec upfrom n = Cons(n, fun () -> upfrom(n+1))
 
-  let rec filter f = function
-  | [] -> failwith "No array given"
-  | x::xs -> if f(x) then x :: filter f xs else filter f xs
+  let rec filter f (Cons(x, xsf)) =
+    if f x then Cons (x, fun () -> filter f (xsf()))
+    else filter f (xsf())
+
+  let rec take n (Cons(x, xsf)) =
+    if n <= 0 then [] else x :: take (n-1) (xsf ())
+
+  let rec skip n (Cons(x, xsf)) =
+    match n with
+    | 0 -> upfrom x
+    | _ -> skip (n-1) (xsf())
 
   let is_divisible_stream lst =
     let rec inner acc = function
     | [] -> acc
-    | x::xs -> let mul = filter (fun z -> (z % x) = 0) stream
+    | x::xs -> let mul = filter (fun z -> (z % x) = 0) acc
                inner mul xs
-    inner nats lst
+    inner (upfrom 1) lst
 
   let is_divisible xs =
     let rec inner sx = function
@@ -171,8 +181,8 @@ module Problem07 =
   let test () =
     printfn "-- Problem 07 --"
 
-    is_divisible_stream [2;3;21;10] |> printfn "%A"
-    is_divisible [2;3;21;10] |> printfn "%A"
+    is_divisible_stream [2;3;21;10] |> skip 20 |> take 10 |> printfn "%A"
+    is_divisible [2;3;21;10] |> Seq.skip 20 |> Seq.take 10 |> printfn "%A"
 
 (*
   Create a tail-recursive function that has a big integer as input and
@@ -197,30 +207,39 @@ module Problem08 =
 module Problem11 =
 
   let fib n =
-    let rec inner (x, y) i =
-      if i < n then inner (x+y, x) (i+1I) else x
-    inner (0I, 1I) 0I
+    let rec inner (x, y) = function
+    | 0 -> 0
+    | 1 -> 1
+    | i -> inner ((x+y),(i+1)) i
+    inner (0, 1) 0
 
-  // rewrite with ref and pointers
-  let fib_imp n =
-    Seq.init (int n) id
-    |> Seq.fold (fun (x, y) items -> (x+y, x)) (0I, 1I)
+  let rec fib_imp n = function
+  | 0 -> 0
+  | 1 -> 1
+  | n ->
+    let fib1 = ref 0
+    let fib2 = ref 1
+    let res = ref 0
+    let count = ref n
+
+    while !count > 2 do
+      res := !fib1 + !fib2
+      fib1 := !fib2
+      fib2 := !res
+
+    !res
 
   let test () =
     printfn "-- Problem 11 --"
     let timer = new Stopwatch()
     timer.Start()
-    for i in 0I..200I do
-      fib_imp i |> ignore
     timer.Stop()
 
     printfn "Time of imperative = %A" timer.ElapsedMilliseconds
 
     let timer = new Stopwatch()
     timer.Start()
-    for i in 0I..200I do
-      fib i |> ignore
-    timer.Stop()
+    fib 200 |> ignore
 
     printfn "Time of recursive = %A" timer.ElapsedMilliseconds
 
@@ -383,9 +402,9 @@ module Problem16 =
 module Problem18 =
   module Time =
     [<Measure>] type Seconds
-    [<Measure>] type Milliseconds
-    [<Measure>] type Microseconds
-    [<Measure>] type Nanoseconds
+    [<Measure>] type Milliseconds = Seconds^3
+    [<Measure>] type Microseconds = Seconds^6
+    [<Measure>] type Nanoseconds = Seconds^9
 
     let MillisecondsPerSecond = 1000.0<Milliseconds/Seconds>
     let MicrosecondsPerSecond = 1000000.0<Microseconds/Seconds>
