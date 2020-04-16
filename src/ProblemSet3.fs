@@ -210,10 +210,11 @@ module Problem11 =
     let rec inner (x, y) = function
     | 0 -> 0
     | 1 -> 1
-    | i -> inner ((x+y),(i+1)) i
-    inner (0, 1) 0
+    | i ->
+      inner ((x+y),(i+1)) (i-1)
+    inner (0, 1) n
 
-  let rec fib_imp n = function
+  let rec fib_imp = function
   | 0 -> 0
   | 1 -> 1
   | n ->
@@ -222,24 +223,27 @@ module Problem11 =
     let res = ref 0
     let count = ref n
 
-    while !count > 2 do
+    while !count >= 2 do
       res := !fib1 + !fib2
       fib1 := !fib2
       fib2 := !res
+      count := !count - 1
 
     !res
 
   let test () =
     printfn "-- Problem 11 --"
     let timer = new Stopwatch()
-    timer.Start()
-    timer.Stop()
+    timer.Start ()
+    fib_imp 2000000 |> ignore
+    timer.Stop ()
 
     printfn "Time of imperative = %A" timer.ElapsedMilliseconds
 
     let timer = new Stopwatch()
-    timer.Start()
-    fib 200 |> ignore
+    timer.Start ()
+    fib 2000000 |> ignore
+    timer.Stop ()
 
     printfn "Time of recursive = %A" timer.ElapsedMilliseconds
 
