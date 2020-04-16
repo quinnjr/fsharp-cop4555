@@ -267,9 +267,8 @@ module Problem12 =
     member this.AddCreditHours hours =
       this.credit_hours := !this.credit_hours + hours
     member this.GPA () =
-      let len = List.length !this.grade_points
       let final_grade = List.reduce (fun acc elem -> acc + elem) !this.grade_points
-      final_grade/(float) len
+      final_grade/(float) (List.length !this.grade_points)
 
   let test () =
     printfn "-- Problem 12 --"
