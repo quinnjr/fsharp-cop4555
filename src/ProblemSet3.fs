@@ -59,7 +59,6 @@ module Problem03 =
     P -> B (P) B
     P -> BAR
 
-
   type Tokens = A | B | BAR
 
   type Tree =
@@ -192,13 +191,22 @@ module Problem08 =
 
   let calc_power count =
     let rec inner acc = function
-    | 1 -> acc * 2I
-    | n -> inner (acc * 2I) (n-1)
-    inner 1I count
+    | n when n = 1I -> acc
+    | n -> inner (acc * 2I) (n-1I)
+
+    if count <> 0I then inner 1I count else 1I
 
   let test () =
     printfn "-- Problem 08 --"
-    calc_power 5 |> printfn "%A"
+    calc_power 0I |> printfn "%A"
+    calc_power 1I |> printfn "%A"
+    calc_power 2I |> printfn "%A"
+    calc_power 4I |> printfn "%A"
+    calc_power 16I |> printfn "%A"
+    calc_power 256I |> printfn "%A"
+    calc_power 1024I |> printfn "%A"
+    calc_power 32768I |> printfn "%A"
+    calc_power 65536I |> printfn "%A"
 
 (*
  Write a non-recursive fibonacci function using imperative F#. Compare the
@@ -370,10 +378,31 @@ module Problem16 =
                else ERROR (sprintf "'if' statement integer value must be 0 or 1, not '%A'" n)
     | v -> ERROR (sprintf "'if' statement needs a boolean argument, not '%A'" v)
   | ISZERO -> ISZERO
+  | REC (e1, e2) -> ERROR "Not yet implemeneted"
+  | ID e1 -> ERROR "Not yet implemented"
+  | FUN (e1, e2) -> ERROR "Not yet implemented"
 
   let interpfile filename = filename |> parsefile |> interp
 
   let interpstr sourcecode = sourcecode |> parsestr |> interp
+
+  let subst e x t =
+    match e with
+    | ERROR s -> interp t
+    | NUM a -> interp t
+    | BOOL b -> interp t
+    | SUCC -> interp t
+    | PRED -> interp t
+    | ISZERO -> interp t
+    | APP (e1, _) -> APP (e1, interp t)
+    | IF (b, e1, e2) ->
+      match interp b with
+      | BOOL b -> if b then interp e1  else interp e2
+      | NUM n -> if n = 1 then interp(e1)
+                 else if n = 0 then interp(e2)
+                 else ERROR (sprintf "'if' statement integer value must be 0 or 1, not '%A'" n)
+      | v -> ERROR (sprintf "'if' statement needs a boolean argument, not '%A'" v)
+    | _ -> ERROR "Not yet implemented"
 
   let test () =
     printfn "-- Problem 16 --"
@@ -392,6 +421,10 @@ module Problem16 =
     interpfile "src/complex3.txt" |> printfn "%A"
     interpfile "src/complex4.txt" |> printfn "%A"
 
+    subst (NUM 6) "a" (NUM 3) |> printfn "%A"
+    subst (BOOL true) "a" (NUM 3) |> printfn "%A"
+    subst SUCC "a" (NUM 3) |> printfn "%A"
+    subst (IF (BOOL true, FUN ("a", APP (SUCC, ID "a")), FUN ("b", APP (SUCC, ID "a")))) "a" (NUM 3) |> printfn "%A"
 (*
   Declare type measures for seconds, microseconds, milliseconds, and nanoseconds.
   Declare constants for the number of seconds in each of the other types.
