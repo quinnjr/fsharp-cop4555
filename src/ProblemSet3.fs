@@ -326,6 +326,46 @@ module Problem12 =
 
   Does this solve the problem? Explain why or why not.
 *)
+
+module Problem13 =
+
+  type Stack<'a> = {
+    push: 'a -> unit;
+    pop: unit -> unit;
+    top: unit -> 'a;
+    isEmpty: unit -> bool;
+  }
+
+  let stack init =
+    let stk = ref init
+    {
+      push = fun n -> stk := n :: (!stk);
+      pop = fun () -> stk := List.tail (!stk);
+      top = fun () -> List.head (!stk);
+      isEmpty = fun () -> List.isEmpty (!stk);
+    }
+
+  let factorial n =
+    let s = stack [1] // 0! = 1
+    for i = 1 to n do
+      s.push i
+
+    let out = ref 1 // 0! = 1
+
+    while (s.isEmpty ()) <> true do
+      out := !out * (s.top ())
+      s.pop ()
+    !out
+
+  let test () =
+    printfn "-- Problem 13 --"
+    factorial 0 |> printfn "%A"
+    factorial 1 |> printfn "%A"
+    factorial 2 |> printfn "%A"
+    factorial 3 |> printfn "%A"
+    factorial 4 |> printfn "%A"
+    factorial 5 |> printfn "%A"
+
 module Problem15 =
 
   let makeMonitoredFun f =
