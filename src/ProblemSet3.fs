@@ -512,3 +512,31 @@ module Problem18 =
     |> Time.MicrosecondsToSeconds
     |> Time.SecondsToNanoseconds
     |> printfn "0.00000009 seconds to nanoseconds: %A"
+
+module ProblemEx17 =
+  module Distance =
+    [<Measure>] type Feet
+    [<Measure>] type Inch
+    [<Measure>] type Meter
+    [<Measure>] type Centimeter
+
+    let InchPerFeet = 0.0833333<Inch/Feet>
+    let InchPerMeter = 0.0254<Inch/Meter>
+    let InchPerCentimeter = 2.54<Inch/Centimeter>
+    let MeterPerCentimeter = 100<Meter/Centimeter>
+    let MeterPerFeet = 3.28084<Meter/Feet>
+
+    let InchesToFeet n = n * InchPerFeet
+    let InchesToMeters n = n * InchPerMeter
+    let InchesToCentimeters n = n * InchPerCentimeter
+    let FeetToInches n = n / InchPerFeet
+    let FeetToMeters n = n / MeterPerFeet
+    let CentimetersToInches n = n / InchPerCentimeter
+    let MetersToCentimeters n = n * MeterPerCentimeter
+
+  open Distance
+  let test () =
+    printfn "-- Problem EX 17 --"
+    FeetToInches 5.5 |> printfn "5.5 feet is %A inches"
+    InchesToFeet 100.0 |> printfn "100 inches is equal to %A feet"
+    InchesToCentimeters 100.0 |> printfn "100 inches is equal to %A centimeters"

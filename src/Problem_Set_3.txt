@@ -1,7 +1,11 @@
 2.
     a. The strings the CFG recognizes a balanced set of zeroes and ones.
     b. "0110"
-    c.
+    c. 0       0
+      /       / \
+     1       1   1
+    / \     /
+  1    0   0
 
 4.
     a. The memory value of i is 5. The memory value of j is 8. i's value is changed
@@ -23,9 +27,12 @@
 
 10. FSharp is left-associative, so first FSharp determines that a function that
     takes f as a parameter of type 'a is to be expected. Next, Fsharp determines that the
-    first call to function f is a sub-call to f as well. Finally, FSharp determines
-    that the inner call to function f is of type float, meaning input
-    and output should be of type float since no other hints
+    first call to function f returns a type 'b. The next step is a
+    sub-call to f as well, so f must take a type 'a and return a type 'a. Next,
+    FSharp performs the same inspection of the second f function, thus determining
+    the same typing: a function f takes a parameter 'a and returns an 'a type.
+    Finally, FSharp determines that the inner call to function f is of type float,
+    meaning input and output should be of type float since no other hints
     are specified. Finally, FSharp takes typings to mean that the lambda
     function is of type f:(float -> float) -> float.
 
@@ -39,7 +46,14 @@
 
     Using my example code, the assignments are confirmed to work correctly.
 
-15.
+15. The first example of `mrev` is not valid because it violates FSharp's typing
+  system. By being of too generic a type, the FSharp compiler cannot infer the
+  typings that are requested by the function and cannot guarantee further static
+  type checking against the function. For example, the '_a list type presented does
+  not describe the side effects of presenting an empty list to the function followed
+  by a list with valid, but different, types. The second function definition
+  allows FSharp's compiler to recognize proper types that are given to the `mrev`
+  function and provides type soundness for the use of `mrev`
 
 ============================= HW 3 Elaboration ================================
 
