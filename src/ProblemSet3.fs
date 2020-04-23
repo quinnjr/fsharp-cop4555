@@ -513,6 +513,61 @@ module Problem18 =
     |> Time.SecondsToNanoseconds
     |> printfn "0.00000009 seconds to nanoseconds: %A"
 
+module ProblemEx1 =
+  type TERMINAL = IF|THEN|ELSE|BEGIN|END|PRINT|SEMICOLON|ID|EOF
+  type OPERATION = ADD|SUB|MUL|LPAREN|RPAREN
+
+  let advance toks = List.tail toks
+
+  let eat t toks =
+    if ((List.head toks) = t) then
+      advance(toks)
+    else
+        failwith "Invalid syntax supplied"
+
+  let rec S = function
+  | tok::toks ->
+    if tok = IF then
+      let next = advance toks
+      next|> eat(THEN) |> S |> eat(ELSE) |> S
+    else if tok = BEGIN then
+      let next = advance toks
+      S next |> L
+    else if tok = PRINT
+      let next = advance toks
+      E next
+    else
+      failwith "Program missing valid start symbol"
+  | _ -> failwith "Invalid symbol encountered"
+
+  let rec L = function
+  | tok::toks ->
+    match tok
+  | _ -> failwith "Program is too _"
+
+  let rec E = function
+  | tok::toks ->
+    eat ID toks
+
+  let test_program program =
+    let res = program |> S
+    match result with
+    | [] -> failwith "Early termination or missing EOF"
+    | x::xs ->
+      if x = EOF then
+        printfn "Syntax tree accepted. A program is you."
+      else
+        failwith "Syntax tree rejected. Not a program is you."
+
+  let test () =
+    printfn "-- Problem 03 --"
+    test_program [IF;ID;THEN;BEGIN;PRINT;ID;SEMICOLON;PRINT;ID;END;ELSE;PRINT;ID;EOF]
+    test_program [IF;ID;THEN;IF;ID;THEN;PRINT;ID;ELSE;PRINT;ID;ELSE;BEGIN;PRINT;ID;END;EOF]
+    test_program [IF;ID;THEN;BEGIN;PRINT;ID;SEMICOLON;PRINT;ID;SEMICOLON;END;ELSE;PRINT;ID;EOF]
+    test_program [ID;ADD;ID;ADD;ID;ADD;ID;EOF]
+	  test_program [ID;SUB;ID;MUL;ID;EOF]
+	  test_program [LPAREN;ID;SUB;ID;RPAREN;MUL;ID;EOF]
+
 module ProblemEx17 =
   module Distance =
     [<Measure>] type Feet
