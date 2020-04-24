@@ -52,6 +52,8 @@ let main _ =
   ProblemSet3.ProblemEx7.test ()
   ProblemSet3.ProblemEx8.test ()
   ProblemSet3.ProblemEx9.test ()
+  ProblemSet3.ProblemEx1011121314.test ()
+  ProblemSet3.ProblemEx15.test ()
   ProblemSet3.ProblemEx17.test ()
 
   printfn "\--               --/\n\n"

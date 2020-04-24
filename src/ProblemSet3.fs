@@ -663,6 +663,10 @@ module ProblemEx8 =
     printfn "-- Problem EX 8 --"
     sum 10 |> printfn "The sum of all multiples of 3 less than 10 is: %A"
 
+(*
+  Write a tail recursive function, with an integer parameter n, that calculates
+  the sum of the divisors of n (including n).
+*)
 module ProblemEx9 =
 
   let sum n =
@@ -675,6 +679,42 @@ module ProblemEx9 =
   let test () =
     printfn "-- Problem EX 9 --"
     sum 20 |> printfn "The sum of the divisors of 20 is: %A"
+
+module ProblemEx1011121314 =
+
+  type 'a stream = Cons of 'a * (unit -> 'a stream)
+
+  // Generate an infinite sequence for the series 1/(3*n), for n > 0.
+  let ProblemEx10 = Seq.initInfinite (fun n -> if n > 0 then (1.0/(3.0* float(n))) else 0.0)
+  let ProblemEx11 = Seq.initInfinite (fun n -> if n > 0 then (1.0/(float(n) * float(n))) else 0.0)
+  let rec ProblemEx12 n =
+    Cons(n, (fun () -> ProblemEx12 (n + 23)))
+  let rec ProblemEx13 f =
+    Cons(f, (fun () -> ProblemEx13 (f * (2.0/3.0))))
+  let rec ProblemEx14 (t, u) =
+    Cons((t, u), (fun () -> ProblemEx14 (t + 2, u - 0.01)))
+
+  let test () =
+    printfn "-- Problem EX 10, 11, 12, 13, 14 --"
+    ProblemEx10 |> printfn "%A"
+    ProblemEx11 |> printfn "%A"
+    ProblemEx12 10 |> printfn "%A"
+    ProblemEx13 10.0 |> printfn "%A"
+    ProblemEx14 (5, 10.0) |> printfn "%A"
+
+(*
+  Define `thrice f` as f >> f >> f. Predict the values of `twice thrice succ 0`
+  and `thrice twice succ 0`.
+*)
+module ProblemEx15 =
+
+  let thrice f = f >> f >> f
+  let twice f = f >> f
+
+  let test () =
+    printfn "-- Problem EX 15 --"
+    printfn "The value of `twice thrice succ 0` should be 9"
+    printfn "The value of `thrice twice succ 0` should be = 8"
 
 module ProblemEx17 =
   module Distance =
