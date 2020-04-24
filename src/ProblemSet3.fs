@@ -629,6 +629,40 @@ module ProblemEx4 =
     timer.Stop ()
     printfn "Time of List.rev2 is = %A" timer.ElapsedMilliseconds
 
+(*
+  Write a tail recursive function, with an integer parameter n, that
+  calculates the sum of the odd numbers less than n.
+*)
+module ProblemEx7 =
+
+  let sum n =
+    let rec inner acc = function
+    | 0 -> acc
+    | x when (x % 2) <> 0 -> inner (acc + x) (x-1)
+    | x when (x % 2) = 0 -> inner acc (x-1)
+    inner 0 n
+
+  let test () =
+    printfn "-- Problem EX 7 --"
+    sum 10 |> printfn "The sum of all odd number less than 10 is: %A"
+
+(*
+  Write a tail recursive function, with an integer parameter n, that calculates
+  the sum of the multiples of three that are less than n.
+*)
+module ProblemEx8 =
+
+  let sum n =
+    let rec inner acc = function
+    | 0 -> acc
+    | x when (x % 3) <> 0 -> inner acc (x-1)
+    | x when (x % 3) = 0 -> inner (acc + x) (x-1)
+    inner 0 n
+
+  let test () =
+    printfn "-- Problem EX 8 --"
+    sum 10 |> printfn "The sum of all multiples of 3 less than 10 is: %A"
+
 module ProblemEx17 =
   module Distance =
     [<Measure>] type Feet

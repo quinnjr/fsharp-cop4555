@@ -92,3 +92,7 @@
 4.
   a. The time complexity of the tail-recursive function is O(log(n)) while the non-tail-recursive is
      O(n)
+
+6.
+  a. (APP(SUCC, NUM 3))
+  b. (IF(BOOL true, FUN(NUM 3, APP(SUCC, NUM 3)), FUN("b", APP(SUCC, NUM 3))))
