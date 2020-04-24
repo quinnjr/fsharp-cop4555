@@ -513,6 +513,7 @@ module Problem18 =
     |> Time.SecondsToNanoseconds
     |> printfn "0.00000009 seconds to nanoseconds: %A"
 
+(*
 module ProblemEx1 =
   type TERMINAL = IF|THEN|ELSE|BEGIN|END|PRINT|SEMICOLON|ID|EOF
   type OPERATION = ADD|SUB|MUL|LPAREN|RPAREN
@@ -521,19 +522,20 @@ module ProblemEx1 =
 
   let eat t toks =
     if ((List.head toks) = t) then
-      advance(toks)
+      advance toks
     else
-        failwith "Invalid syntax supplied"
+      failwith "Invalid syntax supplied"
 
   let rec S = function
   | tok::toks ->
-    if tok = IF then
+    match tok with
+    | IF ->
       let next = advance toks
-      next|> eat(THEN) |> S |> eat(ELSE) |> S
-    else if tok = BEGIN then
+      next |> eat(THEN) |> S |> eat(ELSE) |> S
+    | BEGIN ->
       let next = advance toks
       S next |> L
-    else if tok = PRINT
+    | PRINT ->
       let next = advance toks
       E next
     else
@@ -542,8 +544,13 @@ module ProblemEx1 =
 
   let rec L = function
   | tok::toks ->
-    match tok
-  | _ -> failwith "Program is too _"
+    match tok with
+    | END ->
+      advance toks
+    | SEMICOLON ->
+      advance toks |> S |> L
+    | _ -> failwith "Program is too short"
+  | _ -> failwith "Invalid syntax"
 
   let rec E = function
   | tok::toks ->
@@ -551,7 +558,7 @@ module ProblemEx1 =
 
   let test_program program =
     let res = program |> S
-    match result with
+    match res with
     | [] -> failwith "Early termination or missing EOF"
     | x::xs ->
       if x = EOF then
@@ -566,7 +573,61 @@ module ProblemEx1 =
     test_program [IF;ID;THEN;BEGIN;PRINT;ID;SEMICOLON;PRINT;ID;SEMICOLON;END;ELSE;PRINT;ID;EOF]
     test_program [ID;ADD;ID;ADD;ID;ADD;ID;EOF]
 	  test_program [ID;SUB;ID;MUL;ID;EOF]
-	  test_program [LPAREN;ID;SUB;ID;RPAREN;MUL;ID;EOF]
+	  test_program [LPAREN;ID;SUB;ID;RPAREN;MUL;ID;EOF] *)
+
+module ProblemEx3 =
+
+  let rev list =
+    let rec inner acc = function
+    | [] -> acc
+    | x::xs -> inner (x::acc) xs
+    inner [] list
+
+  let map f list =
+    let rec inner acc = function
+    | [] -> rev acc
+    | x::xs -> inner (f(x)::acc) xs
+    inner [] list
+
+  let test () =
+    printfn "-- Problem EX 3 --"
+    let timer = new Stopwatch()
+    timer.Start ()
+    map (fun x -> x + 1) [1;2;3;4;5] |> printfn "%A"
+    timer.Stop ()
+    printfn "Time of my List.map is = %A" timer.ElapsedMilliseconds
+
+    let timer = new Stopwatch()
+    timer.Start ()
+    List.map (fun x -> x + 1) [1;2;3;4;5] |> printfn "%A"
+    timer.Stop ()
+    printfn "Time of FSharp's List.map is = %A" timer.ElapsedMilliseconds
+
+module ProblemEx4 =
+
+  let rev list =
+    let rec inner acc = function
+    | [] -> acc
+    | x::xs -> inner (x::acc) xs
+    inner [] list
+
+  let rec rev2 = function
+  | [] -> []
+  | x::xs -> (rev2 xs) @ [x]
+
+  let test () =
+    printfn "-- Problem EX 3 --"
+    let timer = new Stopwatch()
+    timer.Start ()
+    rev [1 .. 1000] |> printfn "%A"
+    timer.Stop ()
+    printfn "Time of my List.rev is = %A" timer.ElapsedMilliseconds
+
+    let timer = new Stopwatch()
+    timer.Start ()
+    rev2 [1 .. 1000] |> printfn "%A"
+    timer.Stop ()
+    printfn "Time of List.rev2 is = %A" timer.ElapsedMilliseconds
 
 module ProblemEx17 =
   module Distance =

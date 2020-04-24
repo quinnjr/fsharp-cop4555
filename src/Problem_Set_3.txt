@@ -58,7 +58,8 @@
 ============================= HW 3 Elaboration ================================
 
 2.
-  a. First, Fsharp determines that fun f must be of type 'a. Next, FSharp looks
+  a. First, Fsharp determines that fun f must be of type 'a. Next, FSharp determines that
+     the return type of the function must be of type 'b. Next, FSharp looks
      at the match statement to determine what the resultant of the expression
      will be. FSharp finds that the return type of all arms of the match statement
      is an integer and determines that the type is int -> int.
@@ -69,9 +70,25 @@
   c. First, FSharp determines that fun x must be of type 'a. Next, FSharp determines that 'a must
      be an int to satisfy the appending of 5 to x. Finally, FSharp determines that the function
      takes an input parameter of type int and returns an int list.
-  d. f: (string -> string) -> int
+  d. First, FSharp determines that f takes a parameter of type 'a. Next, FSharp
+     looks inside the function to determine that 'a must be of type int for its return
+     type. Next, FSharp looks at how function f is applied to "cat", which means that
+     function f must be take a value of type string to work correctly with String.length.
+     Finally, FSharp determines that function is of type (string -> string) -> int.
   e. First, FSharp looks at the function declaration and determines that x must be of
      type 'a and y must be of type 'b. Next, FSharp looks at the function internals to
      determine that the returned value must be of type string as a concatenation of x and y
      is occurring with a string of a space value. Finally, FSharp determines that both
      x and y must be type string.
+  f. First, FSharp determines that the input type of the function must be of type 'a. Next,
+     FSharp looks at the internal types, finding that the applications of the type of 'a must
+     accepts a type of string from "cat". Finally, FSharp determines that the typing of the function
+     is (string -> string) -> string.
+
+3.
+  a. The time complexity of my tail-recursive Map function is log(n) since I use
+     an accumulator-based recursive function for the map function and another
+     tail-recursive reverse function to put the elements in the correct order.
+4.
+  a. The time complexity of the tail-recursive function is O(log(n)) while the non-tail-recursive is
+     O(n)
