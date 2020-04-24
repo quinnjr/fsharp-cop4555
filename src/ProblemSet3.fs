@@ -663,6 +663,19 @@ module ProblemEx8 =
     printfn "-- Problem EX 8 --"
     sum 10 |> printfn "The sum of all multiples of 3 less than 10 is: %A"
 
+module ProblemEx9 =
+
+  let sum n =
+    let rec inner acc = function
+    | 0 -> acc
+    | x when (n % x) = 0 -> inner (acc+x) (x-1)
+    | x when (n % x) <> 0 -> inner acc (x-1)
+    inner 0 n
+
+  let test () =
+    printfn "-- Problem EX 9 --"
+    sum 20 |> printfn "The sum of the divisors of 20 is: %A"
+
 module ProblemEx17 =
   module Distance =
     [<Measure>] type Feet
