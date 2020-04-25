@@ -426,23 +426,14 @@ module Problem16 =
 
   let interpstr sourcecode = sourcecode |> parsestr |> interp
 
-  let subst e x t =
+  let rec subst e x t =
     match e with
-    | ERROR s -> interp t
-    | NUM a -> interp t
-    | BOOL b -> interp t
-    | SUCC -> interp t
-    | PRED -> interp t
-    | ISZERO -> interp t
-    | APP (e1, _) -> APP (e1, interp t)
-    | IF (b, e1, e2) ->
-      match interp b with
-      | BOOL b -> if b then interp e1  else interp e2
-      | NUM n -> if n = 1 then interp(e1)
-                 else if n = 0 then interp(e2)
-                 else ERROR (sprintf "'if' statement integer value must be 0 or 1, not '%A'" n)
-      | v -> ERROR (sprintf "'if' statement needs a boolean argument, not '%A'" v)
-    | _ -> ERROR "Not yet implemented"
+    | ERROR s -> ERROR s
+    | ID y when y = x -> interp t
+    | APP (e1, e2) -> APP (e1, subst e2 x t)
+    | FUN (e1, e2) -> FUN(e1, subst e2 x t)
+    | IF (b, e1, e2) -> IF (b, subst e1 x t, subst e2 x t)
+    | _ -> e
 
   let test () =
     printfn "-- Problem 16 --"
