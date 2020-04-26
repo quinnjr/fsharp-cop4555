@@ -390,8 +390,21 @@ module Problem15 =
 *)
 module Problem16 =
 
+  let rec subst e x t =
+    match e with
+    | ERROR s -> ERROR s
+    | ID y when y = x -> t
+    | APP (e1, e2) -> APP (e1, subst e2 x t)
+    | FUN (e1, e2) -> FUN(e1, subst e2 x t)
+    | IF (b, e1, e2) -> IF (b, subst e1 x t, subst e2 x t)
+    | _ -> e
+
   let rec interp = function
   | ERROR s -> ERROR (sprintf "An error occurred: %A" s)
+  | NUM n -> NUM n
+  | BOOL b -> BOOL b
+  | SUCC -> SUCC
+  | PRED -> PRED
   | APP (e1, e2) ->
     match (interp e1, interp e2) with
     | (ERROR s, _) | (_, ERROR s) -> ERROR s
@@ -403,13 +416,10 @@ module Problem16 =
     | (PRED, v) -> ERROR (sprintf "'pred' needs int argument, not '%A'" v)
     | (ISZERO, NUM n) -> if n = 0 then NUM 1 else NUM 0
     | (ISZERO, v) -> ERROR (sprintf "'iszero' needs int argument, not '%A'" v)
+    | (ID x, _) | (_, ID x) -> subst e1 x e2
+    | (FUN (x, y), e3) -> subst y x e3
     | (REC (e1,e2), _) -> ERROR "Not yet implemeneted"
-    | (ID e1, _) -> ERROR "Not yet implemented"
-    | (FUN (e1, e2), _) -> ERROR "Not yet implemented"
-  | NUM n -> NUM n
-  | BOOL b -> BOOL b
-  | SUCC -> SUCC
-  | PRED -> PRED
+    | _ -> ERROR "Invalid syntax"
   | IF (b, e1, e2) ->
     match interp b with
     | BOOL b -> if b then interp(e1) else interp(e2)
@@ -418,22 +428,13 @@ module Problem16 =
                else ERROR (sprintf "'if' statement integer value must be 0 or 1, not '%A'" n)
     | v -> ERROR (sprintf "'if' statement needs a boolean argument, not '%A'" v)
   | ISZERO -> ISZERO
-  | REC (e1, e2) -> ERROR "Not yet implemeneted"
-  | ID e1 -> ERROR "Not yet implemented"
-  | FUN (e1, e2) -> ERROR "Not yet implemented"
+  | REC (e1, e2) -> REC (e1, e2)
+  | ID e1 -> ID e1
+  | FUN (e1, e2) -> FUN (e1, e2)
 
   let interpfile filename = filename |> parsefile |> interp
 
   let interpstr sourcecode = sourcecode |> parsestr |> interp
-
-  let rec subst e x t =
-    match e with
-    | ERROR s -> ERROR s
-    | ID y when y = x -> interp t
-    | APP (e1, e2) -> APP (e1, subst e2 x t)
-    | FUN (e1, e2) -> FUN(e1, subst e2 x t)
-    | IF (b, e1, e2) -> IF (b, subst e1 x t, subst e2 x t)
-    | _ -> e
 
   let test () =
     printfn "-- Problem 16 --"
@@ -457,13 +458,16 @@ module Problem16 =
     subst SUCC "a" (NUM 3) |> printfn "%A"
     subst (IF (BOOL true, FUN ("a", APP (SUCC, ID "a")), FUN ("b", APP (SUCC, ID "a")))) "a" (NUM 3) |> printfn "%A"
 
+    interpstr "(fun x -> succ x) 4" |> printfn "%A"
+    interpstr "(fun x -> fun y -> fun z -> if iszero x then succ y else pred z) 0 10 20" |> printfn "%A"
+    interpstr "(fun x -> fun y -> fun x -> if iszero x then succ y else pred x) 0 10 20" |> printfn "%A"
     interpfile "src/twice.txt" |> printfn "%A"
 
 module Problem17 =
 
   type typ = VARIABLE of string | INTEGER | BOOLEAN | ARROW of typ * typ
 
-  et rec typ2str = function
+  let rec typ2str = function
   | VARIABLE a -> "'" + a
   | INTEGER    -> "int"
   | BOOLEAN    -> "bool"
@@ -538,6 +542,13 @@ module Problem17 =
         let (s4, t3) = W (s3 << s2 << s1 << env, e3)
         let s5 = unify (s4 t2, t3)
         (s5 << s4 << s3 << s2 << s1, s5 t3)
+    | ISZERO -> (I, BOOLEAN)
+    | SUCC -> (I, INTEGER)
+    | PRED -> (I, INTEGER)
+    | APP (e1, e2) ->
+      match (e1, e2)  with
+      |
+      |
 
   /// infer e finds the principal type of e
   let infer e =
@@ -550,6 +561,9 @@ module Problem17 =
     infer (BOOL true)
     infer (IF(BOOL true, NUM 1, NUM 2))
     infer (IF(BOOL true, IF(BOOL true, NUM 1, NUM 2), IF(BOOL false, NUM 3, NUM 4)))
+    infer (SUCC)
+    infer (PRED)
+    infer (ISZERO)
 
 (*
   Declare type measures for seconds, microseconds, milliseconds, and nanoseconds.
